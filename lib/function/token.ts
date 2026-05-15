@@ -10,9 +10,6 @@ export const setToken = async (token: string) => {
 export async function logoutUser() {
     try {
       await localStorage.removeItem('token');
-    //   router.replace('/login');
-      // console.log('Berhasil logout, semua data login dihapus');
     } catch (error) {
-      // console.error('Gagal logout:', error);
     }
   }

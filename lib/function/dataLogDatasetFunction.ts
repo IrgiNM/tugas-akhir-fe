@@ -10,6 +10,9 @@ const DataLogDatasetFunction = (selectedDate?: string) => {
 
     useEffect(() => {
         const fetch = async () => {
+            // Kosongkan data sebelumnya sebelum memuat data baru
+            setDataLogDataset([]);
+    
             const res = await getLogDataset(selectedDate);
     
             if (res.status === 200) {

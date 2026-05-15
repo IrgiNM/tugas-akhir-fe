@@ -11,14 +11,19 @@ const Navbar = ({ click1, click4, click3, click2, isActived }: NavbarType) => {
         <div className='w-full flex flex-row gap-2 justify-end items-center px-12 absolute z-10 top-[88px] right-[200px]'>
             <ButtonAction
                 onKlik={click1}
-                label='Get Log UPA TIK'
+                label='Top Reports'
                 picked={isActived}
             />
             <ButtonAction
                 onKlik={click2}
-                label='Detection Malware'
+                label='Security Events'
                 picked={isActived}
             />
+            {/* <ButtonAction
+                onKlik={click2}
+                label='Detection Malware'
+                picked={isActived}
+            /> */}
             <ButtonAction
                 onKlik={click3}
                 label='Reset data'

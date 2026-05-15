@@ -15,7 +15,7 @@ import DetectionMalwarePage from '@/components/ui/detectionMalwarePage';
 
 const page = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isActive, setIsActive] = useState('Get Log UPA TIK')
+  const [isActive, setIsActive] = useState('Top Reports')
   const [Login, setLogin] = useState(true)
   const [isRemoveData, setisRemoveData] = useState(false)
   const [username, setUsername] = useState('')
@@ -50,14 +50,14 @@ const page = () => {
       <div className='w-full relative h-screen flex flex-col gap-3 items-center bg-black'>
           <Header></Header>
           <Navbar 
-            click1={() => setIsActive('Get Log UPA TIK')}
+            click1={() => setIsActive('Top Reports')}
             click4={() => setIsActive('Data User')}
             click3={() => setisRemoveData(true)}
             click2={() => setIsActive('Detection Malware')}
             isActived={isActive}
           ></Navbar>
           <div className='h-[80%] w-full'>
-            {isActive==='Get Log UPA TIK'&&(
+            {isActive==='Top Reports'&&(
               <GetLogPage click1={()=>{setIsLoading(true)}} />
             )}
             {isActive==='Detection Malware'&&(

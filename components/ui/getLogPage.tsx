@@ -11,11 +11,14 @@ import HeadButtonJenisLog from '../layout/headButtonJenisLog'
 import CardSummaryGetDasasetLog from '../layout/cardSummaryGetDatasetLog'
 import TableDatasetLog from '../layout/tableDatasetLog'
 import DataLogDatasetFunction from '@/lib/function/dataLogDatasetFunction'
+import TableTopReports from '../layout/tableTopReports'
+import CardSummaryGetTopReports from '../layout/cardSummaryGetTopReports'
+import HeadTopReports from '../layout/headTopReports'
 
 const GetLogPage = ({click1}: ClickType) => {
   const [data, setData] = useState<dataLog[]>(dataResultDetection)
     const {dataNerworkTraffic} = dataNetworkTrafficFunction()
-    const [isActive, setIsActive] = useState('dataset log')
+    const [isActive, setIsActive] = useState('Top Reports')
     const [isAddCSV, setisAddCSV] = useState(false)
     const [isPickCreatedLog, setisPickCreatedLog] = useState(false)
     const [pickDate, setpickDate] = useState('')
@@ -24,12 +27,6 @@ const GetLogPage = ({click1}: ClickType) => {
     const [isDeteksiMalware, setisDeteksiMalware] = useState(false)
     const [filter, setFilter] = useState('All')
     const limit = [100, 500, 1000, 5000]
-
-    useEffect(() => {
-        if (dataCreatedAt.length > 0 && !pickDate) {
-            setpickDate(dataCreatedAt[0]);
-        }
-    }, [dataCreatedAt]);
 
     useEffect(()=>{
         console.error('data created at', dataCreatedAt);
@@ -83,8 +80,15 @@ const GetLogPage = ({click1}: ClickType) => {
     return (
         <>
             <div className='relative flex flex-col items-center gap-5 w-full h-full px-12'>
-                <HeadButtonJenisLog pick='get log' click={()=>setisDeteksiMalware(true)} click2={()=>setisPickCreatedLog(true)}/>
+                {/* <HeadButtonJenisLog pick='get log' click={()=>setisDeteksiMalware(true)} click2={()=>setisPickCreatedLog(true)}/> */}
+                {/* <HeadTopReports pick='get log' click={()=>setisDeteksiMalware(true)} click2={()=>setisPickCreatedLog(true)}/> */}
                 
+                {isActive === 'Top Reports' && (
+                    <>
+                        <CardSummaryGetTopReports/>
+                        {/* <TableTopReports click1={() => setisAddCSV(true)}/> */}
+                    </>
+                )}
                 {isActive === 'http request' && (
                     <>
                         <CardSummaryGetWebsiteLog/>
@@ -98,11 +102,11 @@ const GetLogPage = ({click1}: ClickType) => {
                     </>
                 )}
 
-                {dataNerworkTraffic.length > 0 && (
+                {/* {dataNerworkTraffic.length > 0 && (
                     <button onClick={()=>{setisAddCSV(true)}} className='absolute w-[200px] h-[1px] rounded-l-full bg-white text-black top-5 right-0 p-5 flex justify-center items-center border-1 border-white hover:text-white hover:border-white hover:bg-black transition duration-200 ease-in-out cursor-pointer'>
                         <p className='font-bold'>+ Add Data</p>
                     </button>
-                )}
+                )} */}
                 {isAddCSV && (
                     <>
                         <div className='fixed w-full z-99 h-full bg-black opacity-90'></div>
@@ -153,7 +157,6 @@ const GetLogPage = ({click1}: ClickType) => {
                                                 <button key={index} onClick={()=>{setpickDate(item),setisPickCreatedLog(false)}} className='w-full p-3 rounded-md border-1 border-white text-white font-bold mt-7 hover:bg-white hover:text-black transition-all duration-250'>{item}</button>
                                             )
                                         })}
-                                        
 
                                         <button onClick={()=>{setisPickCreatedLog(false)}} className='w-[35px] h-[35px] bg-black font-bold border-3 border-white rounded-md absolute -top-2 -right-2 hover:bg-white hover:text-black transition-all duration-250'>X</button>
                                     </>

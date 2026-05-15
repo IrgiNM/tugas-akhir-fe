@@ -47,3 +47,8 @@ export const runDetection = (created_at: string) =>
   api.post("detection/run/", {
       created_at: created_at
   });
+
+export const getDataTopReportsAll = () => api.get(`detection/top-reports/`);
+export const getDataTopReportsDay = (date: string) => api.get(`detection/top-reports/?date=${date}`);
+export const getDataTopReportsMonth = (date: string) => api.get(`detection/top-reports/?month=${date}`);
+export const getDataTopReportsYear = (date: string) => api.get(`detection/top-reports/?year=${date}`);
