@@ -1,6 +1,6 @@
 import { dataNetworkTrafficType } from "@/type/dataNetworkTrafficType"
 import { useEffect, useState } from "react"
-import { getListNetworkTraffic } from "./api"
+import { getListNetworkTraffic } from "../function/api"
 import { dataProtokolType } from "@/type/dataProtokolType"
 
 export const dataNetworkTrafficFunction = () => {

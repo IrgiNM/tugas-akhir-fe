@@ -14,7 +14,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #120b2f;
     --foreground: #ededed;
   }
 }
@@ -26,6 +26,10 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.bg-1 {
+  background-color: #120b2f;
 }
 
 body {

@@ -1,8 +1,7 @@
-import axios from "axios";
-import { getToken } from "./token";
 import { loginType } from "@/type/loginType";
 import { registerType } from "@/type/registerType";
-import { userGetType } from "@/type/userGetType";
+import axios from "axios";
+import { getToken } from "./token";
 
 export const BASEURL = process.env.NEXT_PUBLIC_API_URL + "/";
 
@@ -27,7 +26,8 @@ api.interceptors.request.use(
 );
 
 // AUTH
-export const login = (data: loginType) => api.post("api/login/", data);
+export const login = (data: loginType) => axios.post(`${BASEURL}api/login/`, data);
+// export const login = (data: loginType) => api.post("api/login/", data);
 export const register = (data: registerType) => api.post("api/user/create/", data);
 export const getUser = () => api.get("api/user/get/");
 
@@ -52,3 +52,10 @@ export const getDataTopReportsAll = () => api.get(`detection/top-reports/`);
 export const getDataTopReportsDay = (date: string) => api.get(`detection/top-reports/?date=${date}`);
 export const getDataTopReportsMonth = (date: string) => api.get(`detection/top-reports/?month=${date}`);
 export const getDataTopReportsYear = (date: string) => api.get(`detection/top-reports/?year=${date}`);
+export const getGeoIP = (data: string) => api.get(`detection/geo/?ip=${data}`);
+
+export const backupDatabase = () =>
+  api.post("detection/backup/", {}, {
+    responseType: "blob",
+  });
+

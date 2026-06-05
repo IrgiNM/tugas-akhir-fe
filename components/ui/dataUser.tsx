@@ -1,11 +1,8 @@
-import { dataResultDetection } from '@/lib/data/dataResultDetection'
 import { CreateUser, GetDataUser } from '@/lib/function/userFunction'
-import { dataLog } from '@/type/dataLogType'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const DataUser = () => {
-  const [data, setData] = useState<dataLog[]>(dataResultDetection)
   const {dataUser} = GetDataUser()
 //   const [data, setData] = useState<dataLog[]>([])
 

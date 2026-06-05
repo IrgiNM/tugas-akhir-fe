@@ -1,22 +1,12 @@
-import { dataResultDetection } from '@/lib/data/dataResultDetection'
-import { getLogCSV, getLogWatchguard, runDetection, uploadFileCSV } from '@/lib/function/api'
-import { dataNetworkTrafficFunction } from '@/lib/function/dataNetworkTrafficFunction'
+import { getLogCSV, getLogWatchguard, runDetection } from '@/lib/function/api'
+import DataLogDatasetFunction from '@/lib/data/dataLogDatasetFunction'
+import { dataNetworkTrafficFunction } from '@/lib/data/dataNetworkTrafficFunction'
 import { ClickType } from '@/type/clickType'
-import { dataLog } from '@/type/dataLogType'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import TableWebsiteLog from '../layout/tableWebsiteLog'
-import CardSummaryGetWebsiteLog from '../layout/cardSummaryGetWebsiteLog'
-import HeadButtonJenisLog from '../layout/headButtonJenisLog'
-import CardSummaryGetDasasetLog from '../layout/cardSummaryGetDatasetLog'
-import TableDatasetLog from '../layout/tableDatasetLog'
-import DataLogDatasetFunction from '@/lib/function/dataLogDatasetFunction'
-import TableTopReports from '../layout/tableTopReports'
 import CardSummaryGetTopReports from '../layout/cardSummaryGetTopReports'
-import HeadTopReports from '../layout/headTopReports'
 
 const GetLogPage = ({click1}: ClickType) => {
-  const [data, setData] = useState<dataLog[]>(dataResultDetection)
     const {dataNerworkTraffic} = dataNetworkTrafficFunction()
     const [isActive, setIsActive] = useState('Top Reports')
     const [isAddCSV, setisAddCSV] = useState(false)
@@ -87,18 +77,6 @@ const GetLogPage = ({click1}: ClickType) => {
                     <>
                         <CardSummaryGetTopReports/>
                         {/* <TableTopReports click1={() => setisAddCSV(true)}/> */}
-                    </>
-                )}
-                {isActive === 'http request' && (
-                    <>
-                        <CardSummaryGetWebsiteLog/>
-                        <TableWebsiteLog click1={() => setisAddCSV(true)}/>
-                    </>
-                )}
-                {isActive === 'dataset log' && (
-                    <>
-                        <CardSummaryGetDasasetLog/>
-                        <TableDatasetLog click1={() => setisAddCSV(true)}/>
                     </>
                 )}
 

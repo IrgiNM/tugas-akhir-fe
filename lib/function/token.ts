@@ -11,5 +11,6 @@ export async function logoutUser() {
     try {
       await localStorage.removeItem('token');
     } catch (error) {
+      
     }
   }

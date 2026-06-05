@@ -1,9 +1,9 @@
-import { registerType } from "@/type/registerType"
-import { BASEURL, getUser, login, register } from "./api"
 import { loginType } from "@/type/loginType";
-import { setToken } from "./token";
+import { registerType } from "@/type/registerType";
 import { userGetType } from "@/type/userGetType";
 import { useEffect, useState } from "react";
+import { getUser, login, register } from "./api";
+import { setToken } from "./token";
 
 export const CreateUser = async (data: registerType) => {
     try{

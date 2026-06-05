@@ -1,26 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { getDataTopReportsDay, getDataTopReportsAll, getLogDataset, getDataTopReportsMonth, getDataTopReportsYear } from './api';
-import { dataLogDatasetType } from '@/type/dataLogDatasetType';
 import { dataTopReportsType } from '@/type/dataTopReportsType';
 import { jenisTopType } from '@/type/jenisTopType';
 import { nameDataTopType } from '@/type/nameDataTopType';
+import { useEffect, useState } from 'react';
+import { getDataTopReportsAll, getDataTopReportsDay, getDataTopReportsMonth, getDataTopReportsYear } from '../function/api';
 
 const DataTopReportsFunction = (selectedDate?: string, selectedMonth?: string, selectedYear?: string) => {
     const [dataTopReportsAll, setDataTopReportsAll] = useState<dataTopReportsType[]>([])
     const [dataTopReportsYear, setDataTopReportsYear] = useState<dataTopReportsType[]>([])
     const [dataTopReportsMonth, setDataTopReportsMonth] = useState<dataTopReportsType[]>([])
+
     const [dataTopReports, setDataTopReports] = useState<dataTopReportsType[]>([])
     const [dataYearAt, setDataYearAt] = useState<string[]>([])
     const [dataMonthAt, setDataMonthAt] = useState<string[]>([])
     const [dataDateAt, setDataDateAt] = useState<string[]>([])
-    const [dataDatePerMonth, setDataDatePerMonth] = useState<string[]>([])
-    const [dataTopBlockedPerMonth, setDataTopBlockedPerMonth] = useState<string[]>([])
     const [dataNamePerMonth, setDataNamePerMonth] = useState<string[]>([])
+
+    const [dataSecurityJenisAndCountTop, setDataSecurityJenisAndCountTop] = useState<any[]>([])
+    const [dataExecutiveJenisAndCountTop, setDataExecutiveJenisAndCountTop] = useState<any[]>([])
+
     const [dataStatistikPerMonth, setDataStatistikPerMonth] = useState<{ time: string; [key: string]: number | string }[]>([])
-    const [dataJenisAndCountTop, setDataJenisAndCountTop] = useState<jenisTopType[]>([])
+    // const [dataJenisAndCountTop, setDataJenisAndCountTop] = useState<jenisTopType[]>([])
     const [dataJenisTop, setDataJenisTop] = useState<string[]>([])
     const [dataNameTop, setDataNameTop] = useState<string[]>([])
     const [dataNameCountTop, setDataNameCountTop] = useState<nameDataTopType[]>([])
+
+    const [reportsByView, setReportsByView] = useState<Record<string, any[]>>({})
+    const [namesByView, setNamesByView] = useState<Record<string, string[]>>({})
 
 
     // FETCH DATA TOP REPORTS All
@@ -162,18 +167,31 @@ const DataTopReportsFunction = (selectedDate?: string, selectedMonth?: string, s
     }, [dataTopReports])
 
     useEffect(() => {
-        const result = dataJenisTop.map((view_name) => {
+
+        const securityResult = <jenisTopType[]>[]
+        const executiveResult = <jenisTopType[]>[]
+    
+        dataJenisTop.forEach((view_name) => {
+    
             const count = dataTopReports.filter(
                 (item) => item.view_name === view_name
             ).length
     
-            return {
+            const data = {
                 view_name,
                 count
             }
+    
+            if (view_name.includes("blocked")) {
+                securityResult.push(data)
+            } else {
+                executiveResult.push(data)
+            }
         })
     
-        setDataJenisAndCountTop(result)
+        setDataSecurityJenisAndCountTop(securityResult)
+        setDataExecutiveJenisAndCountTop(executiveResult)
+    
     }, [dataJenisTop, dataTopReports])
     
     // EXTRACT PER CONNECTIONS
@@ -216,25 +234,50 @@ const DataTopReportsFunction = (selectedDate?: string, selectedMonth?: string, s
                     .filter((item) => item.fetched_at)
                     .map((item) => item.fetched_at.split("T")[0].split('-')[2])
             )
-        );
+        ).sort((a, b) => Number(b) - Number(a));;
         const months = Array.from(
             new Set(
                 dataTopReportsYear
                     .filter((item) => item.fetched_at)
                     .map((item) => item.fetched_at.split("T")[0].split('-')[1])
             )
-        );
+        ).sort((a, b) => Number(b) - Number(a));;
         const years = Array.from(
             new Set(
                 dataTopReportsAll
                     .filter((item) => item.fetched_at)
                     .map((item) => item.fetched_at.split("T")[0].split('-')[0])
             )
-        );
+        ).sort((a, b) => Number(b) - Number(a));;
         setDataDateAt(dates);
         setDataMonthAt(months);
         setDataYearAt(years);
     }, [dataTopReportsAll,dataTopReportsMonth,dataTopReportsYear]);
+
+    useEffect(() => {
+        // GROUP BY view_name
+        const grouped: Record<string, any[]> = {}
+        dataTopReportsMonth.forEach((item) => {
+            if (!grouped[item.view_name]) {
+                grouped[item.view_name] = []
+            }
+            grouped[item.view_name].push(item)
+        })
+        setReportsByView(grouped)
+
+        // EXTRACT UNIQUE NAMES PER GROUP
+        const namesGrouped: Record<string, string[]> = {}
+        Object.keys(grouped).forEach((key) => {
+            namesGrouped[key] = Array.from(
+                new Set(
+                    grouped[key]
+                        .filter((item) => item.name)
+                        .map((item) => item.name)
+                )
+            )
+        })
+        setNamesByView(namesGrouped)
+    }, [dataTopReportsMonth])
 
     // EXTRACT STATISTIK MONTH
     useEffect(() => {
@@ -246,26 +289,7 @@ const DataTopReportsFunction = (selectedDate?: string, selectedMonth?: string, s
                     .map((item) => item.fetched_at.split("T")[0])
             )
         );
-        // AMBIL SEMUA VIEW NAME
-        const topBlocked = Array.from(
-            new Set(
-                dataTopReportsMonth
-                    .filter((item) => item.view_name)
-                    .map((item) => item.view_name)
-            )
-        );
-        // AMBIL SEMUA NAME
-        const Names = Array.from(
-            new Set(
-                dataTopReportsMonth
-                    .filter((item) => item.name)
-                    .map((item) => item.name)
-            )
-        );
-        // SET STATE
-        setDataDatePerMonth(dates);
-        setDataTopBlockedPerMonth(topBlocked);
-        setDataNamePerMonth(Names);
+
         // =========================
         // FORMAT DATA UNTUK CHART
         // =========================
@@ -282,7 +306,6 @@ const DataTopReportsFunction = (selectedDate?: string, selectedMonth?: string, s
                         .map((item) => item.view_name)
                 )
             );
-        
             // buat data per view_name
             return viewNames.map((viewName) => {
         
@@ -310,7 +333,12 @@ const DataTopReportsFunction = (selectedDate?: string, selectedMonth?: string, s
         
                 return result;
             });
-        });
+        })
+        .sort(
+            (a, b) =>
+                new Date(a.time).getTime() -
+                new Date(b.time).getTime()
+        );
         console.log(dataMalware);
         // kalau mau simpan ke state
         setDataStatistikPerMonth(dataMalware);
@@ -331,9 +359,12 @@ const DataTopReportsFunction = (selectedDate?: string, selectedMonth?: string, s
         dataYearAt,
         dataJenisTop,
         dataNameCountTop,
-        dataJenisAndCountTop,
         dataStatistikPerMonth,
         dataNamePerMonth,
+        reportsByView,
+        namesByView,
+        dataSecurityJenisAndCountTop,
+        dataExecutiveJenisAndCountTop
     }
 }
 

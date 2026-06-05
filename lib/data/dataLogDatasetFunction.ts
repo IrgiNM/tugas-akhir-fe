@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { getLogDataset } from './api';
 import { dataLogDatasetType } from '@/type/dataLogDatasetType';
+import { useEffect, useState } from 'react';
+import { getLogDataset } from '../function/api';
 
 const DataLogDatasetFunction = (selectedDate?: string) => {
     const [dataLogDataset, setDataLogDataset] = useState<dataLogDatasetType[]>([])
