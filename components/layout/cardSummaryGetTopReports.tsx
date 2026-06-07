@@ -36,8 +36,7 @@ const CardSummaryGetTopReports = () => {
     const [dataTop, setDataTop] = useState<dataTopReportsType[]>([])
     const [topBlocked, setTopBlocked] = useState<nameDataTopType[]>([])
 
-    const [isJenisSecurity, setIsJenisSecurity] = useState<boolean>(false)
-    const [isJenisExecutive, setIsJenisExecutive] = useState<boolean>(true)
+    const [activeCategory, setActiveCategory] = useState<'executive' | 'security' | null>('executive')
     const [isDetailIp, setIsDetailIp] = useState<boolean>(false)
     
     const COLORS = [
@@ -143,610 +142,756 @@ const CardSummaryGetTopReports = () => {
       }
     };
 
-  return (
-    <div className='w-full bg-[#0c0b20] border-[.5px] border-[#353b6c] flex flex-col p-8 rounded-md flex-wrap mt-[135px]'>
-        <div className='flex flex-row gap-2 items-center relative mb-3'>
-            <p className='font-bold text-[20px] mr-3'>Top Report</p>
-            <button onClick={()=>{setSelectedDate(true)}} className='flex flex-row justify-between items-center px-3 py-2 border-1 border-gray-700 rounded-md hover:bg-[#353b6c] transition-all duration-200 ease-in-out group'>
-                <p className='font-bold mr-2'>Date</p>
-                <p className='mr-2 text-gray-500 group-hover:text-white transition-all duration-200 ease-in-out'>{pickYearTop+'-'+pickMonthTop+'-'+pickDateTop}</p>
-                <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-            </button>
-            <div className='flex flex-row justify-between items-center px-3 py-2 border-1 border-gray-700 rounded-md'>
-                <p className='font-bold mr-2'>Total Data : </p>
-                <p className='mr-2 text-gray-500'>{dataTopReports.length} data/hari</p>
+    const formatTopName = (value: string) => {
+      return value
+        .replace("top_", "")
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, c => c.toUpperCase())
+    }
+
+    return (
+        <div className="w-full mt-[135px] rounded-2xl border border-[#353b6c] bg-[#070616] p-6 md:p-8 text-white shadow-2xl shadow-black/30">
+      
+          {/* HEADER */}
+          <div className="relative overflow-hidden rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] via-[#120b2f] to-[#0c0b20] p-6 mb-6">
+            <div className="absolute -top-20 -right-20 w-[220px] h-[220px] rounded-full bg-blue-500/10 blur-3xl" />
+            <div className="absolute -bottom-20 -left-20 w-[220px] h-[220px] rounded-full bg-purple-500/10 blur-3xl" />
+      
+            <div className="relative flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
+              <div>
+                <p className="text-sm text-blue-300 mb-2">Analytics Dashboard</p>
+                <h1 className="text-[30px] md:text-[36px] font-bold tracking-tight">
+                  Top Report
+                </h1>
+                <p className="text-gray-400 mt-2 max-w-2xl">
+                  Monitoring data report yang paling sering muncul berdasarkan kategori,
+                  tanggal, koneksi, traffic, dan detail IP yang tersedia.
+                </p>
+              </div>
+      
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => setSelectedDate(true)}
+                  className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 hover:bg-[#353b6c] transition-all duration-200 group"
+                >
+                  <div className="text-left">
+                    <p className="text-xs text-gray-500">Selected Date</p>
+                    <p className="font-bold">
+                      {pickYearTop}-{pickMonthTop}-{pickDateTop}
+                    </p>
+                  </div>
+                  <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                </button>
+      
+                <button
+                  onClick={() => setSelectedView(true)}
+                  className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] hover:scale-[1.02] transition-all duration-200 shadow-lg shadow-blue-500/20 group"
+                >
+                  <div className="text-left">
+                    <p className="text-xs text-blue-200">Selected View</p>
+                    <p className="font-bold max-w-[220px] truncate">
+                      {pickJenisTop}
+                    </p>
+                  </div>
+                  <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                </button>
+              </div>
             </div>
-            <button onClick={()=>{setSelectedView(true)}} className='absolute right-0 flex flex-row justify-between items-center px-3 py-2 border-1 border-white rounded-md hover:bg-[#353b6c] transition-all duration-200 ease-in-out group'>
-                <p className='font-bold mr-2'>View</p>
-                <p className='mr-2 text-gray-500 group-hover:text-white transition-all duration-200 ease-in-out'>{pickJenisTop}</p>
-                <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-            </button>
-        </div>
-        
-        <div className='w-full h-[350px] flex flex-row justify-center pr-10 py-10 items-center p-3 border-1 border-gray-700 rounded-lg mb-2'>
-            <ResponsiveContainer width="50%" height="100%">
-                <BarChart
+      
+            {/* SUMMARY MINI */}
+            <div className="relative grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+              <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-4">
+                <p className="text-gray-400 text-sm">Total Data</p>
+                <p className="text-[24px] font-bold mt-1">
+                  {dataTopReports.length}
+                </p>
+                <p className="text-xs text-gray-500">data / hari</p>
+              </div>
+      
+              <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-4">
+                <p className="text-gray-400 text-sm">Total Reports</p>
+                <p className="text-[24px] font-bold mt-1">
+                  {totalReports}
+                </p>
+                <p className="text-xs text-gray-500">unique report</p>
+              </div>
+      
+              <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-4">
+                <p className="text-gray-400 text-sm">Connections</p>
+                <p className="text-[24px] font-bold mt-1">
+                  {totalConnections}
+                </p>
+                <p className="text-xs text-gray-500">total connections</p>
+              </div>
+      
+              <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-4">
+                <p className="text-gray-400 text-sm">Traffic Bytes</p>
+                <p className="text-[24px] font-bold mt-1">
+                  {(totalBytes / (1024 * 1024)).toFixed(2)} MB
+                </p>
+                <p className="text-xs text-gray-500">total traffic</p>
+              </div>
+            </div>
+          </div>
+      
+          {/* BAR CHART + SUMMARY */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-5">
+      
+            {/* CHART CARD */}
+            <div className="rounded-2xl border border-[#353b6c] bg-[#08071a] p-5 min-h-[420px]">
+              <div className="flex items-start justify-between gap-3 mb-5">
+                <div>
+                  <p className="font-bold text-[20px]">
+                    Top {formatTopName(pickJenisTop)}
+                  </p>
+                  <p className="text-gray-500 text-sm mt-1">
+                    Grafik data terbanyak berdasarkan kategori yang dipilih.
+                  </p>
+                </div>
+      
+                <div className="px-3 py-2 rounded-lg border border-[#353b6c] bg-[#14122d] text-sm text-gray-400">
+                  Bar Chart
+                </div>
+              </div>
+      
+              <div className="w-full h-[320px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
                     data={topBlocked}
                     margin={{
-                    top: 20,
-                    right: 20,
-                    left: -10,
-                    bottom: 5,
+                      top: 25,
+                      right: 20,
+                      left: -10,
+                      bottom: 5,
                     }}
-                    barSize={40}
-                >
+                    barSize={42}
+                  >
                     <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="#1f2937"
-                    vertical={false}
+                      strokeDasharray="3 3"
+                      stroke="#1f2937"
+                      vertical={false}
                     />
-
+      
                     <XAxis
-                    dataKey="name"
-                    stroke="#9ca3af"
-                    tickLine={false}
-                    axisLine={false}
+                      dataKey="name"
+                      stroke="#9ca3af"
+                      tickLine={false}
+                      axisLine={false}
                     />
-
+      
                     <YAxis
-                    stroke="#9ca3af"
-                    tickLine={false}
-                    axisLine={false}
+                      stroke="#9ca3af"
+                      tickLine={false}
+                      axisLine={false}
                     />
-
+      
                     <Tooltip
-                    cursor={{ fill: "rgba(255,255,255,0.05)" }}
-                    contentStyle={{
-                        backgroundColor: "#111827",
-                        border: "1px solid #374151",
+                      cursor={{ fill: "rgba(255,255,255,0.05)" }}
+                      contentStyle={{
+                        backgroundColor: "#0c0b20",
+                        border: "1px solid #353b6c",
                         borderRadius: "12px",
                         color: "#fff",
-                    }}
+                      }}
                     />
-
-                    <Bar
-                    dataKey="total"
-                    radius={[12, 12, 0, 0]}
-                    >
-                    {topBlocked.map((entry, index) => (
+      
+                    <Bar dataKey="total" radius={[12, 12, 0, 0]}>
+                      {topBlocked.map((entry, index) => (
                         <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
                         />
-                    ))}
-
-                    <LabelList
+                      ))}
+      
+                      <LabelList
                         dataKey="total"
                         position="top"
                         fill="#fff"
-                    />
+                      />
                     </Bar>
-                </BarChart>
-            </ResponsiveContainer>
-            <div className='w-[600px] flex flex-col p-3'>
-                <div className=' rounded-md p-5'>
-                    <p className='font-bold text-[18px]'>Top {pickJenisTop.replace("top_", "").replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase())}</p>
-                    <p className='text-gray-500 mb-7'>monitoring {pickJenisTop.replace("top_", "").replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase())} yang paling sering diblokir berdasarkan laporan yang tersedia</p>
-                    <div className='flex flex-row gap-3 mb-3 p-0'>
-                        {/* TOTAL REPORTS */}
-                        <div className='flex flex-1 flex-row items-center bg-gradient-to-t from-[#111c45] to-[#120b2f] p-5 gap-3 rounded-xl border-[.5px] border-[#353b6c]'>
-                            <div className='flex justify-center items-center w-[50px] h-[50px] rounded-full bg-[#3a2604] border-2 border-[#fdff71]'>
-                                <Image src="/status.png" alt="Logo" width={22} height={22} />
-                            </div>
-
-                            <div className='flex flex-col justify-center items-start'>
-                                <div className='flex flex-row items-center gap-3'>
-                                    <p className='font-bold text-[20px]'>{totalReports}</p>
-
-                                    {/* <button onClick={()=>{setSelectedView('views')}} className='flex flex-row justify-between items-center gap-4 px-2 py-1 border-1 border-gray-500 rounded-lg hover:bg-gray-700'>
-                                        <p>More</p>
-                                        <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                    </button> */}
-                                </div>
-                                <p>total reports</p>
-                            </div>
-                        </div>
-
-                        {/* TOTAL CONNECTIONS */}
-                        <div className='flex flex-1 flex-row items-center p-5 gap-3 bg-gradient-to-t from-[#111c45] to-[#120b2f] rounded-xl border-[.5px] border-[#353b6c]'>
-                            <div className='flex justify-center items-center w-[50px] h-[50px] rounded-full bg-[#071049] border-2 border-blue-500'>
-                                <Image src="/http.png" alt="Logo" width={18} height={18} />
-                            </div>
-
-                            <div className='flex flex-col justify-center items-start'>
-                                <p className='font-bold text-[20px]'>{totalConnections}</p>
-                                <p>total connections</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex flex-row gap-3 p-0'>
-                        {/* TOTAL BYTES */}
-                        <div className='flex flex-1 flex-row items-center bg-gradient-to-t from-[#111c45] to-[#120b2f] p-5 gap-3 rounded-xl border-[.5px] border-[#353b6c]'>
-                            <div className='flex justify-center items-center w-[50px] h-[50px] rounded-full bg-[#071049] border-2 border-blue-500'>
-                                <Image src="/wifi.png" alt="Logo" width={22} height={22} />
-                            </div>
-
-                            <div className='flex flex-col justify-center items-start'>
-                                <p className='font-bold text-[20px]'>{(totalBytes / (1024 * 1024)).toFixed(2)} MB</p>
-                                <p>total traffic bytes</p>
-                            </div>
-                        </div>
-
-                        {/* TOTAL VIEW TYPES */}
-                        <div className='flex flex-1 flex-row items-center p-5 gap-3 rounded-xl border-[.5px] border-gray-700'>
-                            {/* <div className='flex justify-center items-center w-[50px] h-[50px] rounded-full bg-[#3a020f] border-2 border-red-500'>
-                                <Image src="/status.png" alt="Logo" width={22} height={22} />
-                            </div>
-
-                            <div className='flex flex-col justify-center items-start'>
-                                <div className='flex flex-row items-center gap-3'>
-                                    <p className='font-bold text-[25px]'>{totalViews}</p>
-
-                                    <button onClick={()=>{setSelectedView('views')}} className='flex flex-row justify-between items-center gap-4 px-2 py-1 border-1 border-gray-500 rounded-lg hover:bg-gray-700'>
-                                        <p>More</p>
-                                        <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                    </button>
-                                </div>
-
-                                <p>total report categories</p>
-                            </div> */}
-                        </div>
-                    </div>
-                </div>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
-        </div>
-
-        <div className='w-full h-[420px] flex flex-row justify-center py-5 items-center p-3 border-1 border-gray-700 rounded-lg mb-2'>
-            <TableTopReports
+      
+            {/* INFORMATION CARD */}
+            <div className="rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] to-[#120b2f] p-6 min-h-[420px]">
+              <div className="mb-7">
+                <p className="font-bold text-[22px]">
+                  Report Summary
+                </p>
+                <p className="text-gray-400 mt-2">
+                  Ringkasan monitoring {formatTopName(pickJenisTop)} berdasarkan
+                  laporan yang tersedia pada tanggal yang dipilih.
+                </p>
+              </div>
+      
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-5">
+                  <div className="w-[52px] h-[52px] rounded-full bg-[#3a2604] border-2 border-[#fdff71] flex items-center justify-center mb-4">
+                    <Image src="/status.png" alt="Status" width={22} height={22} />
+                  </div>
+                  <p className="text-gray-400 text-sm">Total Reports</p>
+                  <p className="text-[28px] font-bold mt-1">{totalReports}</p>
+                </div>
+      
+                <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-5">
+                  <div className="w-[52px] h-[52px] rounded-full bg-[#071049] border-2 border-blue-500 flex items-center justify-center mb-4">
+                    <Image src="/http.png" alt="HTTP" width={18} height={18} />
+                  </div>
+                  <p className="text-gray-400 text-sm">Total Connections</p>
+                  <p className="text-[28px] font-bold mt-1">{totalConnections}</p>
+                </div>
+      
+                <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-5 sm:col-span-2">
+                  <div className="w-[52px] h-[52px] rounded-full bg-[#071049] border-2 border-blue-500 flex items-center justify-center mb-4">
+                    <Image src="/wifi.png" alt="Wifi" width={22} height={22} />
+                  </div>
+                  <p className="text-gray-400 text-sm">Total Traffic Bytes</p>
+                  <p className="text-[28px] font-bold mt-1">
+                    {(totalBytes / (1024 * 1024)).toFixed(2)} MB
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          {/* TABLE */}
+          <div className="w-full rounded-2xl border border-[#353b6c] bg-[#08071a] p-5 mb-5">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+              <div>
+                <p className="font-bold text-[20px]">Report Detail</p>
+                <p className="text-sm text-gray-500">
+                  Klik salah satu data untuk melihat detail geolocation IP.
+                </p>
+              </div>
+      
+              <div className="px-4 py-2 rounded-lg border border-[#353b6c] bg-[#14122d] text-gray-400 text-sm">
+                {dataTop.length} records
+              </div>
+            </div>
+      
+            <div className="w-full h-[420px]">
+              <TableTopReports
                 click1={(name) => {
-                    console.log("clicked item:", name);
-                    setPickIP(name);
-                    setIsDetailIp(true);
+                  console.log("clicked item:", name)
+                  setPickIP(name)
+                  setIsDetailIp(true)
                 }}
                 data={dataTop}
                 pick={pickJenisTop}
-            />
-        </div>
-
-        <div className='w-full flex flex-col justify-center pr-10 py-10 p-3 border-1 border-gray-700 rounded-lg mb-2'>
-            <div className='w-full flex flex-row justify-between items-end'>
-                <p className='font-bold text-[18px] ml-10 mr-3'>Top {pickJenisTop.replace("top_", "").replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase())}</p>
-                <div className='flex flex-row justify-end items-center gap-2'>
-                    <button onClick={()=>{setSelectedMonth(true)}} className='flex flex-row justify-between items-center px-3 py-2 border-1 border-[#353b6c] rounded-md hover:bg-[#353b6c] transition-all duration-200 ease-in-out group'>
-                        <p className='font-bold mr-2'>Month</p>
-                        <p className='mr-2 text-gray-500 group-hover:text-white transition-all duration-200 ease-in-out'>{pickYearTop+'-'+pickMonthTop}</p>
-                        <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                    </button>
-                    <button onClick={()=>{setSelectedView(true)}} className='flex flex-row justify-between items-center px-3 py-2 border-1 border-white rounded-md hover:bg-[#353b6c] transition-all duration-200 ease-in-out group'>
-                        <p className='font-bold mr-2'>View</p>
-                        <p className='mr-2 text-gray-500 group-hover:text-white transition-all duration-200 ease-in-out'>{pickJenisTop}</p>
-                        <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                    </button>
-                </div>
+              />
             </div>
-            <p className='text-gray-500 mb-10 ml-10'>monitoring {pickJenisTop.replace("top_", "").replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase())} yang paling sering diblokir berdasarkan laporan yang tersedia</p>
-            <div className='w-full h-[300px]'>
-                <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={dataStatistikPerMonth.filter((item) => item.view_name === pickJenisTop)}>
-                    <XAxis dataKey="time" stroke="#aaa" />
-                    <YAxis stroke="#aaa" />
-                    <Tooltip />
-                    <Legend
-                            align="left"
-                            wrapperStyle={{
-                                display: "flex",
-                                justifyContent: "flex-start",
-                                flexWrap: "wrap",
-                                gap: "10px",
-                                paddingTop: "50px",
-                                width: "100%",
-                                left: 40,
-                            }}
-                        />
-                    {/* Normal */}
-                    {(namesByView[pickJenisTop] || []).map((item,index)=>{
-                            return(
-                                <Line
-                                    key={index}
-                                    type="monotone"
-                                    dataKey={item}
-                                    stroke={COLORS[index % COLORS.length]}
-                                    strokeWidth={2}
-                                />
-                            )
-                    })}
-                    </LineChart>
-                </ResponsiveContainer>
-            </div>
-        </div>
-
-        <div className="w-full flex flex-col px-10 py-10 border border-[#353b6c] bg-gradient-to-t from-[#111c45] to-[#120b2f] rounded-lg mb-2">
-            <div className="flex items-center gap-3 mb-2">
-                <p className="font-bold text-[22px]">
-                    Backup Top Blocked Data
+          </div>
+      
+          {/* LINE CHART */}
+          <div className="w-full rounded-2xl border border-[#353b6c] bg-[#08071a] p-5 mb-5">
+            <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4 mb-8">
+              <div>
+                <p className="font-bold text-[20px]">
+                  Monthly Trend - {formatTopName(pickJenisTop)}
                 </p>
-            </div>
-            <p className="text-gray-400 mb-8">
-                Export top blocked log data based on the selected time period.
-            </p>
-
-            <div className="w-full flex flex-col p-6 border border-[#353b6c] rounded-lg bg-[#0c0b20]">
-                <div>
-                    <p className="font-semibold text-white mb-3 ml-1">Backup Period</p>
-                    <div className="flex items-center gap-5 mb-5">
-                        {/* Date Awal */}
-                        <button
-                            onClick={() => setSelectedDate(true)}
-                            className="flex items-center px-4 py-3 border border-white rounded-md hover:bg-[#353b6c] transition-all duration-200 group"
-                        >
-                            <p className="font-bold mr-2">
-                                Start :
-                            </p>
-
-                            <p className="text-gray-400 group-hover:text-white mr-4">
-                                {pickBackupAwalYear}-{pickBackupAwalMonth}-{pickBackupAwalDate}
-                            </p>
-                            <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                        </button>
-
-                        <Image
-                            src="/arrow-right.png"
-                            alt="Arrow"
-                            width={18}
-                            height={18}
-                        />
-
-                        {/* Date Akhir */}
-                        <button
-                            onClick={() => setSelectedDate(true)}
-                            className="flex items-center px-4 py-3 border border-white rounded-md hover:bg-[#353b6c] transition-all duration-200 group"
-                        >
-                            <p className="font-bold mr-2">
-                                End :
-                            </p>
-
-                            <p className="text-gray-400 group-hover:text-white mr-4">
-                                {pickBackupAkhirYear}-{pickBackupAkhirMonth}-{pickBackupAkhirDate}
-                            </p>
-                            <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                        </button>
-
-                    </div>
-                </div>
-
-                {/* Dummy Statistics */}
-                <div className="grid grid-cols-3 gap-4 mb-3">
-
-                    <div className="p-4 rounded-md border border-[#353b6c] bg-[#14122d]">
-                        <p className="text-gray-400">
-                            Records Found
-                        </p>
-
-                        <p className="text-[20px] font-bold text-white">
-                            12,456
-                        </p>
-                    </div>
-
-                    <div className="p-4 rounded-md border border-[#353b6c] bg-[#14122d]">
-                        <p className="text-gray-400">
-                            Estimated Size
-                        </p>
-
-                        <p className="text-[20px] font-bold text-white">
-                            24 MB
-                        </p>
-                    </div>
-
-                    <div className="p-4 rounded-md border border-[#353b6c] bg-[#14122d]">
-                        <p className="text-gray-400">
-                            Format
-                        </p>
-
-                        <p className="text-[20px] font-bold text-white">
-                            CSV
-                        </p>
-                    </div>
-
-                </div>
-
-                {/* Warning */}
-                <div className="p-3 rounded-md border border-yellow-500/30 bg-yellow-500/10">
-                    <p className="text-yellow-300">
-                        Only data within the selected date range will be included in the backup file.
-                    </p>
-                </div>
-
-                {/* Action */}
-                <div className="flex justify-end mt-5">
-
-                    <button
-                        onClick={() => handleBackup()}
-                        className="
-                            flex items-center gap-4
-                            px-8 py-3
-                            rounded-md
-                            bg-gradient-to-b
-                            from-[#2563eb]
-                            to-[#1e40af]
-                            shadow-lg shadow-blue-500/20
-                            hover:scale-[1.02]
-                            transition-all duration-200
-                        "
-                    >
-                        <p className="font-bold">
-                            Backup Now
-                        </p>
-
-                        <Image
-                            src="/download.png"
-                            alt="Download"
-                            width={18}
-                            height={18}
-                        />
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {/* TOP */}
-        {selectedView && (
-            <>
-                <div className='w-screen h-screen bg-[#0c0b20] fixed z-11 top-0 left-0 opacity-90'>
-                </div>
-                <div className='fixed z-12 w-full h-full top-0 left-0 flex justify-center items-start gap-2 pt-[200px]'>
-                    <div className='rounded-xl flex flex-col p-10 border-1 border-white bg-[#0c0b20] min-w-[500px]'>
-                        <div className='mb-5'>
-                            <div className='w-full flex flex-row items-center justify-between'>
-                                <p className='font-bold text-[20px]'>Report Executive Categories</p>
-                                <button className='flex flex-row justify-between items-center gap-2 px-2 py-1 border-1 border-gray-500 rounded-lg hover:bg-gray-700' onClick={()=>{setIsJenisExecutive(!isJenisExecutive), setIsJenisSecurity(false)}}>
-                                    {isJenisExecutive ? (
-                                        <p>Close</p>
-                                    ):(
-                                        <p>More</p>
-                                    )}
-                                    <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                </button>
-                            </div>
-                            <p className='mb-5'>daftar kategori report yang tersedia</p>
-                            {isJenisExecutive && (
-                                <div className='w-full h-[200px] flex flex-col overflow-auto scrollbar-hide'>
-                                    {dataExecutiveJenisAndCountTop.map((item,index)=>{
-                                        return(
-                                            <button onClick={()=>{setPickJenisTop(item.view_name),setSelectedView(false)}} key={index} className='w-full flex flex-row justify-between items-center p-3 border-1 border-gray-700 rounded-lg mb-2 hover:bg-gray-900 transition-all duration-200 ease-in-out'>
-                                                <p>{item.view_name}</p>
-                                                <p>{item.count} data</p>
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <div className=''>
-                            <div className='w-full flex flex-row items-center justify-between'>
-                                <p className='font-bold text-[20px]'>Report Security Categories</p>
-                                <button className='flex flex-row justify-between items-center gap-2 px-2 py-1 border-1 border-gray-500 rounded-lg hover:bg-gray-700' onClick={()=>{setIsJenisSecurity(!isJenisSecurity), setIsJenisExecutive(false)}}>
-                                    {isJenisSecurity ? (
-                                        <p>Close</p>
-                                    ):(
-                                        <p>More</p>
-                                    )}
-                                    <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                </button>
-                            </div>
-                            <p className='mb-5'>daftar kategori report yang tersedia</p>
-                            {isJenisSecurity && (
-                                <div className='w-full h-[200px] flex flex-col overflow-auto scrollbar-hide'>
-                                    {dataSecurityJenisAndCountTop.map((item,index)=>{
-                                        return(
-                                            <button onClick={()=>{setPickJenisTop(item.view_name),setSelectedView(false)}} key={index} className='w-full flex flex-row justify-between items-center p-3 border-1 border-gray-700 rounded-lg mb-2 hover:bg-gray-900 transition-all duration-200 ease-in-out'>
-                                                <p>{item.view_name}</p>
-                                                <p>{item.count} data</p>
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <button onClick={()=>{setSelectedView(false)}} className='rounded-lg flex flex-col p-3 items-center justify-center border-2 border-white bg-[#0c0b20] hover:bg-gray-700'>
-                        <Image src="/close.png" alt="Logo" width={12} height={12} />
-                    </button>
-                </div>
-            </>
-        )}
-        
-        {/* GEO LOCATION */}
-        {isDetailIp && (
-            <>
-            {/* Overlay */}
-            <div className="w-screen h-screen bg-[#0c0b20] fixed z-10 top-0 left-0 opacity-80" />
-          
-            {/* Modal Container */}
-            <div className="fixed z-20 w-full h-full top-0 left-0 flex justify-center items-start pt-[120px] px-4">
-          
-              {/* Modal Box */}
-              <div className="rounded-xl flex flex-col p-6 border border-gray-600 bg-[#0c0b20] min-w-[920px] text-white shadow-lg">
-                {/* Header */}
-                <p className="font-bold text-xl">IP Geolocation Detail</p>
-                <p className="mb-6 text-gray-400 text-sm">
-                  Informasi lokasi & security dari IP yang dipilih
+                <p className="text-gray-500 mt-1">
+                  Perkembangan data berdasarkan bulan dan kategori report.
                 </p>
-                <div className="border border-gray-700 rounded-lg p-3 col-span-2 mb-3">
-                    <p className="text-gray-400 mb-2">Location Map</p>
-                    <GeoMap
-                        lat={dataGeo?.latitude??0}
-                        lon={dataGeo?.longitude??0}
-                    />
-                </div>
-                {/* GRID CONTENT */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
-          
-                  {/* Location Card */}
-                  <div className="border border-gray-700 rounded-lg p-3">
-                    <p className="text-gray-400 mb-1">Location</p>
-                    <p>{dataGeo?.city_name}, {dataGeo?.region_name}</p>
-                    <p>{dataGeo?.country_name} ({dataGeo?.country_code})</p>
-                  </div>
-          
-                  {/* Coordinates */}
-                  <div className="border border-gray-700 rounded-lg p-3">
-                    <p className="text-gray-400 mb-1">Coordinates</p>
-                    <p>Lat: {dataGeo?.latitude}</p>
-                    <p>Lon: {dataGeo?.longitude}</p>
-                  </div>
-          
-                  {/* Network */}
-                  <div className="border border-gray-700 rounded-lg p-3">
-                    <p className="text-gray-400 mb-1">Network</p>
-                    <p>ISP: {dataGeo?.isp}</p>
-                    <p>ASN: {dataGeo?.asn}</p>
-                  </div>
-          
-                  {/* Security */}
-                  <div className="border border-gray-700 rounded-lg p-3">
-                    <p className="text-gray-400 mb-1">Security</p>
-                    <p>Fraud Score: {dataGeo?.fraud_score}</p>
-                    <p>
-                      Proxy:{" "}
-                      <span className={dataGeo?.is_proxy ? "text-red-400" : "text-green-400"}>
-                        {dataGeo?.is_proxy ? "Yes" : "No"}
-                      </span>
-                    </p>
-                  </div>
-          
-                </div>
-          
               </div>
-          
-              {/* Close Button */}
-              <button
-                onClick={() => setIsDetailIp(false)}
-                className="ml-3 rounded-lg p-3 border border-gray-600 bg-[#0c0b20] hover:bg-gray-800"
-              >
-                <Image src="/close.png" alt="close" width={14} height={14} />
-              </button>
-          
+      
+              <div className="flex flex-col sm:flex-row gap-2">
+                <button
+                  onClick={() => setSelectedMonth(true)}
+                  className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+                >
+                  <div className="text-left">
+                    <p className="text-xs text-gray-500">Month</p>
+                    <p className="font-bold">
+                      {pickYearTop}-{pickMonthTop}
+                    </p>
+                  </div>
+                  <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                </button>
+      
+                <button
+                  onClick={() => setSelectedView(true)}
+                  className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] hover:scale-[1.02] transition-all duration-200"
+                >
+                  <div className="text-left">
+                    <p className="text-xs text-blue-200">View</p>
+                    <p className="font-bold max-w-[200px] truncate">
+                      {pickJenisTop}
+                    </p>
+                  </div>
+                  <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                </button>
+              </div>
             </div>
-          </>
-        )}
+      
+            <div className="w-full h-[330px] rounded-xl border border-[#353b6c] bg-[#0c0b20] p-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={dataStatistikPerMonth.filter((item) => item.view_name === pickJenisTop)}
+                >
+                  <XAxis dataKey="time" stroke="#9ca3af" />
+                  <YAxis stroke="#9ca3af" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#0c0b20",
+                      border: "1px solid #353b6c",
+                      borderRadius: "12px",
+                      color: "#fff",
+                    }}
+                  />
+                  <Legend
+                    align="left"
+                    wrapperStyle={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                      paddingTop: "30px",
+                      width: "100%",
+                      left: 20,
+                    }}
+                  />
+      
+                  {(namesByView[pickJenisTop] || []).map((item, index) => (
+                    <Line
+                      key={index}
+                      type="monotone"
+                      dataKey={item}
+                      stroke={COLORS[index % COLORS.length]}
+                      strokeWidth={2.5}
+                      dot={false}
+                      activeDot={{ r: 5 }}
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+      
+          {/* BACKUP */}
+          <div className="w-full rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] to-[#120b2f] p-6">
+            <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5 mb-6">
+              <div>
+                <p className="font-bold text-[24px]">
+                  Backup Top Blocked Data
+                </p>
+                <p className="text-gray-400 mt-2">
+                  Export top blocked log data berdasarkan rentang waktu yang dipilih.
+                </p>
+              </div>
+      
+              <button
+                onClick={() => handleBackup()}
+                className="flex items-center justify-center gap-4 px-8 py-3 rounded-xl bg-gradient-to-b from-[#2563eb] to-[#1e40af] border border-blue-500 shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all duration-200"
+              >
+                <p className="font-bold">Backup Now</p>
+                <Image src="/download.png" alt="Download" width={18} height={18} />
+              </button>
+            </div>
+      
+            <div className="rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-5">
+              <p className="font-semibold text-white mb-4">Backup Period</p>
+      
+              <div className="flex flex-col lg:flex-row lg:items-center gap-4 mb-5">
+                <button
+                  onClick={() => setSelectedDate(true)}
+                  className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200 group"
+                >
+                  <div className="text-left">
+                    <p className="text-xs text-gray-500">Start Date</p>
+                    <p className="font-bold">
+                      {pickBackupAwalYear}-{pickBackupAwalMonth}-{pickBackupAwalDate}
+                    </p>
+                  </div>
+                  <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                </button>
+      
+                <div className="hidden lg:flex w-[42px] h-[42px] rounded-full border border-[#353b6c] bg-[#14122d] items-center justify-center">
+                  <Image src="/arrow-right.png" alt="Arrow" width={18} height={18} />
+                </div>
+      
+                <button
+                  onClick={() => setSelectedDate(true)}
+                  className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200 group"
+                >
+                  <div className="text-left">
+                    <p className="text-xs text-gray-500">End Date</p>
+                    <p className="font-bold">
+                      {pickBackupAkhirYear}-{pickBackupAkhirMonth}-{pickBackupAkhirDate}
+                    </p>
+                  </div>
+                  <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                </button>
+              </div>
+      
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="p-4 rounded-xl border border-[#353b6c] bg-[#14122d]">
+                  <p className="text-gray-400 text-sm">Records Found</p>
+                  <p className="text-[24px] font-bold mt-1">12,456</p>
+                </div>
+      
+                <div className="p-4 rounded-xl border border-[#353b6c] bg-[#14122d]">
+                  <p className="text-gray-400 text-sm">Estimated Size</p>
+                  <p className="text-[24px] font-bold mt-1">24 MB</p>
+                </div>
+      
+                <div className="p-4 rounded-xl border border-[#353b6c] bg-[#14122d]">
+                  <p className="text-gray-400 text-sm">Format</p>
+                  <p className="text-[24px] font-bold mt-1">CSV</p>
+                </div>
+              </div>
+      
+              <div className="p-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10">
+                <p className="text-yellow-300 text-sm">
+                  Only data within the selected date range will be included in the backup file.
+                </p>
+              </div>
+            </div>
+          </div>
+      
+          {/* MODAL VIEW */}
+          {selectedView && (
+            <>
+                <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
 
-        {/* DATE */}
-        {selectedDate && (
-            <>
-                <div className='w-screen h-screen bg-[#0c0b20] fixed z-11 top-0 left-0 opacity-90'>
-                </div>
-                <div className='fixed z-12 w-full h-full top-0 left-0 flex justify-center items-start gap-2 pt-[200px]'>
-                    <div className='rounded-xl flex flex-col p-10 border-1 border-white bg-[#0c0b20] min-w-[500px]'>
-                        <p className='font-bold text-[20px]'>Available Report Dates</p>
-                        <p className='mb-5'>Menampilkan daftar tanggal yang memiliki data report</p>
-                        <div className='w-full flex flex-row justify-center items-start p-3 gap-2'>
-                            <div className='flex-1 flex-col'>
-                                <button className='w-full p-3 border-1 border-white rounded-md flex flex-row gap-2 justify-center items-center hover:bg-gray-900 mb-5'>
-                                    {pickYearTop??''}
-                                    <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                </button>
-                                <div className='w-full flex flex-col h-[150px] overflow-auto scrollbar-hide'>
-                                    {dataYearAt.map((item,index)=>{
-                                        return(
-                                            <button onClick={()=>{setPickYearTop(item),setSelectedDate(false)}} key={index} className='w-full flex flex-row justify-center items-center p-3 border-1 border-gray-800 rounded-lg mb-2 hover:bg-gray-900 transition-all duration-200 ease-in-out'>
-                                                <p>{item}</p>
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                            <div className='flex-1 flex-col'>
-                                <button className='w-full p-3 border-1 border-white rounded-md flex flex-row gap-2 justify-center items-center hover:bg-gray-900 mb-5'>
-                                    {pickMonthTop??''}
-                                    <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                </button>
-                                <div className='w-full flex flex-col h-[150px] overflow-auto scrollbar-hide'>
-                                    {dataMonthAt.map((item,index)=>{
-                                        return(
-                                            <button onClick={()=>{setPickMonthTop(item),setSelectedDate(false)}} key={index} className='w-full flex flex-row justify-center items-center p-3 border-1 border-gray-800 rounded-lg mb-2 hover:bg-gray-900 transition-all duration-200 ease-in-out'>
-                                                <p>{item}</p>
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                            <div className='flex-1 flex-col'>
-                                <button className='w-full p-3 border-1 border-white rounded-md flex flex-row gap-2 justify-center items-center hover:bg-gray-900 mb-5'>
-                                    {pickDateTop??''}
-                                    <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                </button>
-                                <div className='w-full flex flex-col h-[150px] overflow-auto scrollbar-hide'>    
-                                    {dataDateAt.map((item,index)=>{
-                                        return(
-                                            <button onClick={()=>{setPickDateTop(item),setSelectedDate(false)}} key={index} className='w-full flex flex-row justify-center items-center p-3 border-1 border-gray-800 rounded-lg mb-2 hover:bg-gray-900 transition-all duration-200 ease-in-out'>
-                                                <p>{item}</p>
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                        </div>
+                <div className="fixed inset-0 z-50 flex justify-center items-start gap-3 pt-[160px] px-5">
+                <div className="w-full max-w-[650px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-7 shadow-2xl">
+
+                    <div className="mb-6">
+                    <p className="font-bold text-[24px]">Report Categories</p>
+                    <p className="text-gray-500 mt-1">
+                        Pilih kategori report yang ingin ditampilkan.
+                    </p>
                     </div>
-                    <button onClick={()=>{setSelectedDate(false)}} className='rounded-lg flex flex-col p-3 items-center justify-center border-2 border-white bg-[#0c0b20] hover:bg-gray-700'>
-                        <Image src="/close.png" alt="Logo" width={12} height={12} />
-                    </button>
+
+                    {/* EXECUTIVE */}
+                    <div className="mb-6 rounded-xl border border-[#353b6c] bg-[#08071a] p-4">
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                        <div>
+                        <p className="font-bold text-[18px]">Executive Categories</p>
+                        <p className="text-gray-500 text-sm">
+                            {dataExecutiveJenisAndCountTop.length} kategori tersedia.
+                        </p>
+                        </div>
+
+                        <button
+                        type="button"
+                        className="px-4 py-2 rounded-lg border border-[#353b6c] hover:bg-[#353b6c] transition-all duration-200"
+                        onClick={() => {
+                            setActiveCategory(activeCategory === 'executive' ? null : 'executive')
+                        }}
+                        >
+                        {activeCategory === 'executive' ? 'Close' : 'More'}
+                        </button>
+                    </div>
+
+                    {activeCategory === 'executive' && (
+                        <div className="max-h-[220px] overflow-auto scrollbar-hide space-y-2">
+                        {dataExecutiveJenisAndCountTop.length === 0 ? (
+                            <div className="w-full p-4 rounded-lg border border-[#353b6c] bg-[#0c0b20] text-gray-500 text-center">
+                            Data executive belum tersedia.
+                            </div>
+                        ) : (
+                            dataExecutiveJenisAndCountTop.map((item, index) => (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                setPickJenisTop(item.view_name)
+                                setSelectedView(false)
+                                }}
+                                key={index}
+                                className="w-full flex justify-between items-center p-3 rounded-lg border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+                            >
+                                <p>{item.view_name}</p>
+                                <p className="text-gray-400">{item.count} data</p>
+                            </button>
+                            ))
+                        )}
+                        </div>
+                    )}
+                    </div>
+
+                    {/* SECURITY */}
+                    <div className="rounded-xl border border-[#353b6c] bg-[#08071a] p-4">
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                        <div>
+                        <p className="font-bold text-[18px]">Security Categories</p>
+                        <p className="text-gray-500 text-sm">
+                            {dataSecurityJenisAndCountTop.length} kategori tersedia.
+                        </p>
+                        </div>
+
+                        <button
+                        type="button"
+                        className="px-4 py-2 rounded-lg border border-[#353b6c] hover:bg-[#353b6c] transition-all duration-200"
+                        onClick={() => {
+                            setActiveCategory(activeCategory === 'security' ? null : 'security')
+                        }}
+                        >
+                        {activeCategory === 'security' ? 'Close' : 'More'}
+                        </button>
+                    </div>
+
+                    {activeCategory === 'security' && (
+                        <div className="max-h-[220px] overflow-auto scrollbar-hide space-y-2">
+                        {dataSecurityJenisAndCountTop.length === 0 ? (
+                            <div className="w-full p-4 rounded-lg border border-[#353b6c] bg-[#0c0b20] text-gray-500 text-center">
+                            Data security belum tersedia.
+                            </div>
+                        ) : (
+                            dataSecurityJenisAndCountTop.map((item, index) => (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                setPickJenisTop(item.view_name)
+                                setSelectedView(false)
+                                }}
+                                key={index}
+                                className="w-full flex justify-between items-center p-3 rounded-lg border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+                            >
+                                <p>{item.view_name}</p>
+                                <p className="text-gray-400">{item.count} data</p>
+                            </button>
+                            ))
+                        )}
+                        </div>
+                    )}
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    onClick={() => setSelectedView(false)}
+                    className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+                >
+                    <Image src="/close.png" alt="Close" width={12} height={12} />
+                </button>
                 </div>
             </>
-        )}
-        
-        {/* DATE */}
-        {selectedMonth && (
+            )}
+      
+          {/* MODAL GEO LOCATION */}
+          {isDetailIp && (
             <>
-                <div className='w-screen h-screen bg-[#0c0b20] fixed z-11 top-0 left-0 opacity-90'>
-                </div>
-                <div className='fixed z-12 w-full h-full top-0 left-0 flex justify-center items-start gap-2 pt-[200px]'>
-                    <div className='rounded-xl flex flex-col p-10 border-1 border-white bg-[#0c0b20] min-w-[500px]'>
-                        <p className='font-bold text-[20px]'>Available Report Months</p>
-                        <p className='mb-5'>Menampilkan daftar bulan yang memiliki data report</p>
-                        <div className='w-full flex flex-row justify-center items-start p-3 gap-2'>
-                            <div className='flex-1 flex-col'>
-                                <button className='w-full p-3 border-1 border-white rounded-md flex flex-row gap-2 justify-center items-center hover:bg-gray-900 mb-5'>
-                                    {pickYearTop??''}
-                                    <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                </button>
-                                <div className='w-full flex flex-col h-[150px] overflow-auto scrollbar-hide'>
-                                    {dataYearAt.map((item,index)=>{
-                                        return(
-                                            <button onClick={()=>{setPickYearTop(item),setSelectedMonth(false)}} key={index} className='w-full flex flex-row justify-center items-center p-3 border-1 border-gray-800 rounded-lg mb-2 hover:bg-gray-900 transition-all duration-200 ease-in-out'>
-                                                <p>{item}</p>
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                            <div className='flex-1 flex-col'>
-                                <button className='w-full p-3 border-1 border-white rounded-md flex flex-row gap-2 justify-center items-center hover:bg-gray-900 mb-5'>
-                                    {pickMonthTop??''}
-                                    <Image src="/arrow-icon.png" alt="Logo" width={8} height={8} />
-                                </button>
-                                <div className='w-full flex flex-col h-[150px] overflow-auto scrollbar-hide'>
-                                    {dataMonthAt.map((item,index)=>{
-                                        return(
-                                            <button onClick={()=>{setPickMonthTop(item),setSelectedMonth(false)}} key={index} className='w-full flex flex-row justify-center items-center p-3 border-1 border-gray-800 rounded-lg mb-2 hover:bg-gray-900 transition-all duration-200 ease-in-out'>
-                                                <p>{item}</p>
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                        </div>
+              <div className="fixed inset-0 z-40 bg-[#0c0b20]/85 backdrop-blur-sm" />
+      
+              <div className="fixed inset-0 z-50 flex justify-center items-start pt-[110px] px-5 gap-3">
+                <div className="w-full max-w-[980px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-6 shadow-2xl">
+                  <div className="mb-5">
+                    <p className="font-bold text-[24px]">IP Geolocation Detail</p>
+                    <p className="text-gray-500 text-sm mt-1">
+                      Informasi lokasi dan security dari IP yang dipilih.
+                    </p>
+                  </div>
+      
+                  <div className="rounded-xl border border-[#353b6c] bg-[#08071a] p-4 mb-4">
+                    <p className="text-gray-400 mb-3">Location Map</p>
+                    <GeoMap
+                      lat={dataGeo?.latitude ?? 0}
+                      lon={dataGeo?.longitude ?? 0}
+                    />
+                  </div>
+      
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="rounded-xl border border-[#353b6c] bg-[#14122d] p-4">
+                      <p className="text-gray-400 mb-2">Location</p>
+                      <p>{dataGeo?.city_name}, {dataGeo?.region_name}</p>
+                      <p>{dataGeo?.country_name} ({dataGeo?.country_code})</p>
                     </div>
-                    <button onClick={()=>{setSelectedMonth(false)}} className='rounded-lg flex flex-col p-3 items-center justify-center border-2 border-white bg-[#0c0b20] hover:bg-gray-700'>
-                        <Image src="/close.png" alt="Logo" width={12} height={12} />
-                    </button>
+      
+                    <div className="rounded-xl border border-[#353b6c] bg-[#14122d] p-4">
+                      <p className="text-gray-400 mb-2">Coordinates</p>
+                      <p>Lat: {dataGeo?.latitude}</p>
+                      <p>Lon: {dataGeo?.longitude}</p>
+                    </div>
+      
+                    <div className="rounded-xl border border-[#353b6c] bg-[#14122d] p-4">
+                      <p className="text-gray-400 mb-2">Network</p>
+                      <p>ISP: {dataGeo?.isp}</p>
+                      <p>ASN: {dataGeo?.asn}</p>
+                    </div>
+      
+                    <div className="rounded-xl border border-[#353b6c] bg-[#14122d] p-4">
+                      <p className="text-gray-400 mb-2">Security</p>
+                      <p>Fraud Score: {dataGeo?.fraud_score}</p>
+                      <p>
+                        Proxy:{' '}
+                        <span className={dataGeo?.is_proxy ? 'text-red-400' : 'text-green-400'}>
+                          {dataGeo?.is_proxy ? 'Yes' : 'No'}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
+      
+                <button
+                  onClick={() => setIsDetailIp(false)}
+                  className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+                >
+                  <Image src="/close.png" alt="Close" width={14} height={14} />
+                </button>
+              </div>
             </>
-        )}
-    </div>
-  )
+          )}
+      
+          {/* MODAL DATE */}
+          {selectedDate && (
+            <>
+              <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
+      
+              <div className="fixed inset-0 z-50 flex justify-center items-start gap-3 pt-[170px] px-5">
+                <div className="w-full max-w-[620px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-7 shadow-2xl">
+                  <p className="font-bold text-[24px]">Available Report Dates</p>
+                  <p className="text-gray-500 mt-1 mb-6">
+                    Pilih tanggal yang memiliki data report.
+                  </p>
+      
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <button className="w-full p-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] font-bold mb-3">
+                        {pickYearTop ?? ''}
+                      </button>
+      
+                      <div className="h-[180px] overflow-auto scrollbar-hide space-y-2">
+                        {dataYearAt.map((item, index) => (
+                          <button
+                            onClick={() => {
+                              setPickYearTop(item)
+                              setSelectedDate(false)
+                            }}
+                            key={index}
+                            className="w-full p-3 rounded-lg border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200"
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+      
+                    <div>
+                      <button className="w-full p-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] font-bold mb-3">
+                        {pickMonthTop ?? ''}
+                      </button>
+      
+                      <div className="h-[180px] overflow-auto scrollbar-hide space-y-2">
+                        {dataMonthAt.map((item, index) => (
+                          <button
+                            onClick={() => {
+                              setPickMonthTop(item)
+                              setSelectedDate(false)
+                            }}
+                            key={index}
+                            className="w-full p-3 rounded-lg border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200"
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+      
+                    <div>
+                      <button className="w-full p-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] font-bold mb-3">
+                        {pickDateTop ?? ''}
+                      </button>
+      
+                      <div className="h-[180px] overflow-auto scrollbar-hide space-y-2">
+                        {dataDateAt.map((item, index) => (
+                          <button
+                            onClick={() => {
+                              setPickDateTop(item)
+                              setSelectedDate(false)
+                            }}
+                            key={index}
+                            className="w-full p-3 rounded-lg border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200"
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+      
+                <button
+                  onClick={() => setSelectedDate(false)}
+                  className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+                >
+                  <Image src="/close.png" alt="Close" width={12} height={12} />
+                </button>
+              </div>
+            </>
+          )}
+      
+          {/* MODAL MONTH */}
+          {selectedMonth && (
+            <>
+              <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
+      
+              <div className="fixed inset-0 z-50 flex justify-center items-start gap-3 pt-[170px] px-5">
+                <div className="w-full max-w-[520px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-7 shadow-2xl">
+                  <p className="font-bold text-[24px]">Available Report Months</p>
+                  <p className="text-gray-500 mt-1 mb-6">
+                    Pilih bulan yang memiliki data report.
+                  </p>
+      
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <button className="w-full p-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] font-bold mb-3">
+                        {pickYearTop ?? ''}
+                      </button>
+      
+                      <div className="h-[180px] overflow-auto scrollbar-hide space-y-2">
+                        {dataYearAt.map((item, index) => (
+                          <button
+                            onClick={() => {
+                              setPickYearTop(item)
+                              setSelectedMonth(false)
+                            }}
+                            key={index}
+                            className="w-full p-3 rounded-lg border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200"
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+      
+                    <div>
+                      <button className="w-full p-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] font-bold mb-3">
+                        {pickMonthTop ?? ''}
+                      </button>
+      
+                      <div className="h-[180px] overflow-auto scrollbar-hide space-y-2">
+                        {dataMonthAt.map((item, index) => (
+                          <button
+                            onClick={() => {
+                              setPickMonthTop(item)
+                              setSelectedMonth(false)
+                            }}
+                            key={index}
+                            className="w-full p-3 rounded-lg border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200"
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+      
+                <button
+                  onClick={() => setSelectedMonth(false)}
+                  className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+                >
+                  <Image src="/close.png" alt="Close" width={12} height={12} />
+                </button>
+              </div>
+            </>
+          )}
+      
+        </div>
+      )
 }
 
 export default CardSummaryGetTopReports

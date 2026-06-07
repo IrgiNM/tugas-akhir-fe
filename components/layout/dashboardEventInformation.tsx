@@ -1,397 +1,605 @@
 "use client"
+
 import Image from 'next/image'
 import { useState } from 'react'
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import {
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Area,
+  AreaChart,
+} from 'recharts'
 
 const DashboardEventInformation = () => {
-    const [selectedMonth,setSelectedMonth] = useState<boolean>(false)
-    const dataMalware = [
-        { time: "00:00", object_event: 5 },
-        { time: "01:00", object_event: 3 },
-        { time: "02:00", object_event: 2 },
-        { time: "03:00", object_event: 1 },
-        { time: "04:00", object_event: 2 },
-        { time: "05:00", object_event: 4 },
-        { time: "06:00", object_event: 6 },
-        { time: "07:00", object_event: 10 },
-        { time: "08:00", object_event: 12 },
-        { time: "09:00", object_event: 18 },
-        { time: "10:00", object_event: 15 },
-        { time: "11:00", object_event: 22 },
-        { time: "12:00", object_event: 30 },
-        { time: "13:00", object_event: 28 },
-        { time: "14:00", object_event: 25 },
-        { time: "15:00", object_event: 20 },
-        { time: "16:00", object_event: 24 },
-        { time: "17:00", object_event: 27 },
-        { time: "18:00", object_event: 32 },
-        { time: "19:00", object_event: 29 },
-        { time: "20:00", object_event: 35 },
-        { time: "21:00", object_event: 31 },
-        { time: "22:00", object_event: 26 },
-        { time: "23:00", object_event: 19 },
-        { time: "24:00", object_event: 8 },
-    ];
-    const dataEventDetail = [
-        {
-            time: "08:20",
-            eventId: 10010,
-            host: "CLIENT-10",
-            ip: "192.168.3.15",
-            malware: "Clean",
-            status: "SAFE"
-        },
-        {
-            time: "08:19",
-            eventId: 10009,
-            host: "CLIENT-09",
-            ip: "192.168.3.14",
-            malware: "Spyware.Keylogger",
-            status: "HIGH"
-        },
-        {
-            time: "08:18",
-            eventId: 10008,
-            host: "CLIENT-08",
-            ip: "192.168.3.13",
-            malware: "Trojan.Downloader",
-            status: "HIGH"
-        },
-        {
-            time: "08:17",
-            eventId: 10007,
-            host: "CLIENT-07",
-            ip: "192.168.3.12",
-            malware: "Worm.Agent",
-            status: "HIGH"
-        },
-        {
-            time: "08:16",
-            eventId: 10006,
-            host: "CLIENT-06",
-            ip: "192.168.3.11",
-            malware: "Adware.Generic",
-            status: "WARNING"
-        },
-        {
-            time: "08:15",
-            eventId: 10005,
-            host: "CLIENT-05",
-            ip: "192.168.3.10",
-            malware: "-",
-            status: "SAFE"
-        },
-        {
-            time: "08:14",
-            eventId: 10004,
-            host: "DB-SERVER-01",
-            ip: "192.168.2.30",
-            malware: "Ransomware.LockBit",
-            status: "CRITICAL"
-        },
-        {
-            time: "08:13",
-            eventId: 10003,
-            host: "WIN-LAPTOP-03",
-            ip: "192.168.2.10",
-            malware: "Spyware.Generic",
-            status: "HIGH"
-        },
-        {
-            time: "08:12",
-            eventId: 10002,
-            host: "WIN-PC-02",
-            ip: "192.168.1.20",
-            malware: "Suspicious DLL",
-            status: "WARNING"
-        },
-        {
-            time: "08:11",
-            eventId: 10001,
-            host: "WIN-SRV-01",
-            ip: "192.168.1.10",
-            malware: "Trojan.Generic",
-            status: "HIGH"
-        }
-    ]
+  const [selectedMonth, setSelectedMonth] = useState<boolean>(false)
+
+  const dataMalware = [
+    { time: "00:00", object_event: 5 },
+    { time: "01:00", object_event: 3 },
+    { time: "02:00", object_event: 2 },
+    { time: "03:00", object_event: 1 },
+    { time: "04:00", object_event: 2 },
+    { time: "05:00", object_event: 4 },
+    { time: "06:00", object_event: 6 },
+    { time: "07:00", object_event: 10 },
+    { time: "08:00", object_event: 12 },
+    { time: "09:00", object_event: 18 },
+    { time: "10:00", object_event: 15 },
+    { time: "11:00", object_event: 22 },
+    { time: "12:00", object_event: 30 },
+    { time: "13:00", object_event: 28 },
+    { time: "14:00", object_event: 25 },
+    { time: "15:00", object_event: 20 },
+    { time: "16:00", object_event: 24 },
+    { time: "17:00", object_event: 27 },
+    { time: "18:00", object_event: 32 },
+    { time: "19:00", object_event: 29 },
+    { time: "20:00", object_event: 35 },
+    { time: "21:00", object_event: 31 },
+    { time: "22:00", object_event: 26 },
+    { time: "23:00", object_event: 19 },
+    { time: "24:00", object_event: 8 },
+  ]
+
+  const dataEventDetail = [
+    {
+      time: "08:20",
+      eventId: 10010,
+      host: "CLIENT-10",
+      ip: "192.168.3.15",
+      malware: "Clean",
+      status: "SAFE"
+    },
+    {
+      time: "08:19",
+      eventId: 10009,
+      host: "CLIENT-09",
+      ip: "192.168.3.14",
+      malware: "Spyware.Keylogger",
+      status: "HIGH"
+    },
+    {
+      time: "08:18",
+      eventId: 10008,
+      host: "CLIENT-08",
+      ip: "192.168.3.13",
+      malware: "Trojan.Downloader",
+      status: "HIGH"
+    },
+    {
+      time: "08:17",
+      eventId: 10007,
+      host: "CLIENT-07",
+      ip: "192.168.3.12",
+      malware: "Worm.Agent",
+      status: "HIGH"
+    },
+    {
+      time: "08:16",
+      eventId: 10006,
+      host: "CLIENT-06",
+      ip: "192.168.3.11",
+      malware: "Adware.Generic",
+      status: "WARNING"
+    },
+    {
+      time: "08:15",
+      eventId: 10005,
+      host: "CLIENT-05",
+      ip: "192.168.3.10",
+      malware: "-",
+      status: "SAFE"
+    },
+    {
+      time: "08:14",
+      eventId: 10004,
+      host: "DB-SERVER-01",
+      ip: "192.168.2.30",
+      malware: "Ransomware.LockBit",
+      status: "CRITICAL"
+    },
+    {
+      time: "08:13",
+      eventId: 10003,
+      host: "WIN-LAPTOP-03",
+      ip: "192.168.2.10",
+      malware: "Spyware.Generic",
+      status: "HIGH"
+    },
+    {
+      time: "08:12",
+      eventId: 10002,
+      host: "WIN-PC-02",
+      ip: "192.168.1.20",
+      malware: "Suspicious DLL",
+      status: "WARNING"
+    },
+    {
+      time: "08:11",
+      eventId: 10001,
+      host: "WIN-SRV-01",
+      ip: "192.168.1.10",
+      malware: "Trojan.Generic",
+      status: "HIGH"
+    }
+  ]
+
+  const recentEvents = [
+    { time: "08:20", text: "CLIENT-10 Clean activity", status: "SAFE" },
+    { time: "08:19", text: "DB-SERVER-01 Ransomware attempt", status: "CRITICAL" },
+    { time: "08:18", text: "CLIENT-09 Keylogger detected", status: "HIGH" },
+    { time: "08:17", text: "CLIENT-08 Downloader malware", status: "HIGH" },
+    { time: "08:16", text: "CLIENT-06 Adware detected", status: "WARNING" },
+    { time: "08:15", text: "CLIENT-07 Worm activity", status: "HIGH" },
+    { time: "08:14", text: "CLIENT-05 Normal traffic", status: "SAFE" },
+    { time: "08:13", text: "WIN-SRV-01 Credential dumping activity", status: "CRITICAL" },
+    { time: "08:12", text: "PC-02 Suspicious DLL activity", status: "WARNING" },
+    { time: "08:11", text: "LAPTOP-03 Spyware detected", status: "HIGH" },
+  ]
+
+  const getStatusStyle = (status: string) => {
+    if (status === "SAFE") {
+      return {
+        badge: "border-green-500/30 bg-green-500/10 text-green-400",
+        dot: "bg-green-400",
+        row: "hover:border-green-500/30",
+      }
+    }
+
+    if (status === "WARNING") {
+      return {
+        badge: "border-yellow-500/30 bg-yellow-500/10 text-yellow-300",
+        dot: "bg-yellow-400",
+        row: "hover:border-yellow-500/30",
+      }
+    }
+
+    if (status === "HIGH") {
+      return {
+        badge: "border-orange-500/30 bg-orange-500/10 text-orange-400",
+        dot: "bg-orange-500",
+        row: "hover:border-orange-500/30",
+      }
+    }
+
+    return {
+      badge: "border-red-500/30 bg-red-500/10 text-red-400",
+      dot: "bg-red-500",
+      row: "hover:border-red-500/30",
+    }
+  }
+
+  const criticalCount = dataEventDetail.filter((item) => item.status === "CRITICAL").length
+  const highCount = dataEventDetail.filter((item) => item.status === "HIGH").length
+  const warningCount = dataEventDetail.filter((item) => item.status === "WARNING").length
+  const safeCount = dataEventDetail.filter((item) => item.status === "SAFE").length
+
   return (
     <>
-        <div className='w-full flex flex-col justify-start px-5 py-5 items-center p-3 bg-[#0b0c1c] border-1 border-gray-700 rounded-lg mb-2'>
-                <div className='w-full rounded-md p-5'>
-                    <p className='font-bold text-[18px]'>Event Information</p>
-                    <p className='text-gray-500 mb-7'>monitoring protokol yang paling sering diblokir berdasarkan laporan yang tersedia</p>
-                    <div className='w-full h-[200px] mb-7 pr-10'>
-                    <ResponsiveContainer width="100%" height={200}>
-                        <LineChart data={dataMalware}>
-                            <XAxis dataKey="time" stroke="#aaa" />
-                            <YAxis stroke="#aaa" />
-                            <Tooltip />
+      <div className="w-full rounded-2xl border border-[#353b6c] bg-[#0b0c1c] p-5 md:p-6">
 
-                            {/* <Legend
-                                align="left"
-                                wrapperStyle={{
-                                    display: "flex",
-                                    justifyContent: "flex-start",
-                                    flexWrap: "wrap",
-                                    gap: "10px",
-                                    paddingTop: "20px",
-                                    width: "100%",
-                                    left: 40,
-                                }}
-                            /> */}
+        {/* HEADER */}
+        <div className="relative overflow-hidden rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] via-[#120b2f] to-[#0c0b20] p-6 mb-5">
+          <div className="absolute -top-20 -right-20 w-[220px] h-[220px] rounded-full bg-red-500/10 blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 w-[220px] h-[220px] rounded-full bg-blue-500/10 blur-3xl" />
 
-                            {/* Trojan */}
-                            <Line
-                                type="monotone"
-                                dataKey="object_event"
-                                stroke="#3b82f6"
-                                strokeWidth={2}
-                            />
-                        </LineChart>
-                    </ResponsiveContainer>
-                    </div>
-                    <div className='flex flex-row gap-3 mb-3 p-0'>
-                        {/* TOTAL EVENTS */}
-                        <div className='flex flex-1 flex-row justify-center items-center p-5 gap-3 rounded-xl border-[.5px] border-blue-500 bg-[#0b0c1c]'>
-                            <div className='flex flex-col justify-center items-center'>
-                                <div className='flex flex-row items-center gap-3'>
-                                    <p className='font-bold text-[25px]'>12097 <span className='text-[12px] font-light'>All Data</span></p>
-                                </div>
-                                <p>Total Events</p>
-                            </div>
-                        </div>
-                        {/* CRITICALL */}
-                        <div className='flex flex-1 flex-row justify-center items-center p-5 gap-3 rounded-xl border-[.5px] border-blue-900 bg-[#0b0c1c]'>
-                            <div className='flex flex-col justify-center items-center'>
-                                <div className='flex flex-row items-center gap-3'>
-                                    <p className='font-bold text-[25px]'>65 <span className='text-[12px] font-light'>Alert</span></p>
-                                </div>
-                                <p>Critical</p>
-                            </div>
-                        </div>
-                        {/* SAFE */}
-                        <div className='flex flex-1 flex-row justify-center items-center p-5 gap-3 rounded-xl border-[.5px] border-blue-900 bg-[#0b0c1c]'>
-                            <div className='flex flex-col justify-center items-center'>
-                                <div className='flex flex-row items-center gap-3'>
-                                    <p className='font-bold text-[25px]'>92 <span className='text-[12px] font-light'>%</span></p>
-                                </div>
-                                <p>Safe </p>
-                            </div>
-                        </div>
-                        {/*  */}
-                        <div className='flex flex-1 flex-row justify-center items-center p-5 gap-3 rounded-xl border-[.5px] border-blue-900 bg-[#0b0c1c]'>
-                            <div className='flex flex-col justify-center items-center'>
-                                <div className='flex flex-row items-center gap-3'>
-                                    <p className='font-bold text-[25px]'>104 <span className='text-[12px] font-light'>data</span></p>
-                                </div>
-                                <p>New / hour</p>
-                            </div>
-                        </div>
+          <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div>
+              <p className="text-sm text-red-300 font-semibold mb-2">
+                Event Security Analytics
+              </p>
+              <h2 className="font-bold text-[26px] md:text-[30px]">
+                Event Information
+              </h2>
+              <p className="text-gray-400 mt-2 max-w-2xl">
+                Monitoring aktivitas event, deteksi malware, dan status ancaman
+                berdasarkan log keamanan jaringan.
+              </p>
+            </div>
 
-                        
-                    </div>
-                    <div className='flex flex-row gap-3 mb-3 p-0'>
-                        <div className='flex-1 flex-col justify-between items-center p-5 gap-3 rounded-xl border-[.5px] border-blue-900'>
-                            <div className='w-full border-1 border-gray-600 rounded-md p-5 flex flex-row gap-2 justify-between items-center'>
-                                <p className='flex-1 text-center border-r-1 border-gray-700'>Time</p>
-                                <p className='flex-1 text-center border-r-1 border-gray-700'>Event ID</p>
-                                <p className='flex-2 text-center border-r-1 border-gray-700'>Host</p>
-                                <p className='flex-2 text-center border-r-1 border-gray-700'>IP</p>
-                                <p className='flex-2 text-center border-r-1 border-gray-700'>Malware</p>
-                                <p className='flex-1 text-center'>Status</p>
-                            </div>
-                            <div className='w-full h-[280px] overflow-auto scrollbar-hide flex flex-col items-center justify-center'>
-                                {dataEventDetail.map((item,index)=>{
-                                    return(
-                                        <div className='w-full rounded-md p-5 flex flex-row gap-2 justify-between items-center'>
-                                            <p className='flex-1 text-center'>{item.time}</p>
-                                            <p className='flex-1 text-center'>{item.eventId}</p>
-                                            <p className='flex-2 text-center'>{item.host}</p>
-                                            <p className='flex-2 text-center'>{item.ip}</p>
-                                            <p className='flex-2 text-center'>{item.malware}</p>
-                                            <p className={`flex-1 text-center ${item.status==='WARNING'&&'border-1 py-2 border-red-600 bg-[#370f16] rounded-md'}`}>{item.status}</p>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </div>
-                        <div className='flex flex-row justify-between items-center p-5 gap-3 rounded-xl border-[.5px] border-blue-900'>
-                            <div className='flex flex-col justify-center items-start gap-2'>
-                                <div className='flex flex-row gap-3 items-start'>
-                                    <p className='text-[18px] font-bold mb-2'>Recent Events Feed</p>
-                                    <button onClick={()=>{setSelectedMonth(true)}} className='flex flex-row justify-between items-center gap-2 px-3 py-1 border-1 border-gray-500 rounded-lg hover:bg-gray-700'>
-                                        <p>Info</p>
-                                        <Image src="/info.png" alt="Logo" width={12} height={12} />
-                                    </button>
-                                    <div className='flex flex-row items-center gap-3 px-3 py-1'>
-                                        <div className='w-[10px] h-[10px] bg-red-500 rounded-full'/>
-                                        <p className='font-bold text-[15px]'>2</p>
-                                    </div>
-                                </div>
-                                <div className='flex flex-col items-start gap-3 p-5 border border-gray-700 border-dashed rounded-md w-full h-[300px] overflow-auto scrollbar-hide'>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-green-500 rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:20</span>
-                                            <span className='ml-5'>CLIENT-10 Clean activity</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-red-500 animate-ping rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:19</span>
-                                            <span className='ml-5'>DB-SERVER-01 Ransomware attempt</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-orange-500 rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:18</span>
-                                            <span className='ml-5'>CLIENT-09 Keylogger detected</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-orange-500 rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:17</span>
-                                            <span className='ml-5'>CLIENT-08 Downloader malware</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-yellow-400 rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:16</span>
-                                            <span className='ml-5'>CLIENT-06 Adware detected</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-orange-500 rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:15</span>
-                                            <span className='ml-5'>CLIENT-07 Worm activity</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-green-500 rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:14</span>
-                                            <span className='ml-5'>CLIENT-05 Normal traffic</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-red-500 animate-ping rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:13</span>
-                                            <span className='ml-5'>WIN-SRV-01 Credential dumping activity</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-yellow-400 rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:12</span>
-                                            <span className='ml-5'>PC-02 Suspicious DLL activity</span>
-                                        </p>
-                                    </div>
-                                    <div className='flex flex-row items-center gap-3'>
-                                        <div className='w-[10px] h-[10px] bg-orange-500 rounded-full'/>
-                                        <p>
-                                            <span className='font-bold'>08:11</span>
-                                            <span className='ml-5'>LAPTOP-03 Spyware detected</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <button
+              onClick={() => setSelectedMonth(true)}
+              className="flex items-center justify-center gap-3 px-5 py-3 rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 hover:bg-[#353b6c] transition-all duration-200"
+            >
+              <Image src="/info.png" alt="Info" width={15} height={15} />
+              <p className="font-bold">Status Info</p>
+            </button>
+          </div>
         </div>
-        {/* DATE */}
-        {selectedMonth && (
-            <>
-                <div className='w-screen h-screen bg-black fixed z-11 top-0 left-0 opacity-90'>
+
+        {/* CHART + STATUS */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-5">
+
+          {/* CHART */}
+          <div className="xl:col-span-2 rounded-2xl border border-[#353b6c] bg-[#08071a] p-5">
+            <div className="flex items-start justify-between gap-3 mb-5">
+              <div>
+                <p className="font-bold text-[20px]">
+                  Event Activity Timeline
+                </p>
+                <p className="text-gray-500 text-sm mt-1">
+                  Jumlah event yang terdeteksi per jam.
+                </p>
+              </div>
+
+              <div className="px-3 py-2 rounded-lg border border-red-500/30 bg-red-500/10 text-red-400 text-sm font-bold">
+                Live Monitor
+              </div>
+            </div>
+
+            <div className="w-full h-[280px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={dataMalware}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+                  <XAxis
+                    dataKey="time"
+                    stroke="#9ca3af"
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#9ca3af"
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <Tooltip
+                    cursor={{ stroke: "#ef4444", strokeWidth: 1 }}
+                    contentStyle={{
+                      backgroundColor: "#0c0b20",
+                      border: "1px solid #353b6c",
+                      borderRadius: "12px",
+                      color: "#fff",
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="object_event"
+                    stroke="#ef4444"
+                    strokeWidth={3}
+                    dot={false}
+                    activeDot={{
+                      r: 6,
+                      fill: "#ef4444",
+                      stroke: "#fff",
+                      strokeWidth: 2,
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* RISK SUMMARY */}
+          <div className="rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] to-[#120b2f] p-5">
+            <div className="mb-5">
+              <p className="font-bold text-[20px]">Risk Summary</p>
+              <p className="text-gray-500 text-sm mt-1">
+                Ringkasan status event terbaru.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-red-400 font-bold">Critical</p>
+                  <p className="text-[26px] font-bold">{criticalCount}</p>
                 </div>
-                <div className='fixed z-12 w-full h-full top-0 left-0 flex justify-center items-start gap-2 pt-[200px]'>
-                    <div className='rounded-xl flex flex-col p-10 border-1 border-white bg-black'>
-                        <p className='font-bold text-[20px]'>Info Status Recent Events</p>
-                        <p className='mb-5'>Berikut maksud dari warna status pada setiap data recent events</p>
-                        <div className='flex flex-col gap-4 h-[300px] overflow-auto scrollbar-hide pr-2'>
-                        {/* SAFE */}
-                        <div className='border border-gray-700 rounded-md p-5 flex flex-col gap-2'>
-                            <div className='flex flex-row items-center gap-3 mb-2'>
-                                <div className='w-[10px] h-[10px] bg-green-500 rounded-full mr-3'/>
-                                <p>SAFE</p>
-                            </div>
+                <p className="text-xs text-gray-500 mt-1">highest threat level</p>
+              </div>
 
-                            <p className='pl-5'>Clean activity</p>
-                            <p className='pl-5'>Normal traffic</p>
-                            <p className='pl-5'>Authorized access</p>
-                            <p className='pl-5'>No threat detected</p>
-                            <p className='pl-5'>Routine scan completed</p>
-                            <p className='pl-5'>Policy compliance success</p>
-                            <p className='pl-5'>Heartbeat received</p>
-                        </div>
-
-                        {/* WARNING */}
-                        <div className='border border-gray-700 rounded-md p-5 flex flex-col gap-2'>
-                            <div className='flex flex-row items-center gap-3 mb-2'>
-                                <div className='w-[10px] h-[10px] bg-yellow-400 rounded-full mr-3'/>
-                                <p>WARNING</p>
-                            </div>
-
-                            <p className='pl-5'>Adware detected</p>
-                            <p className='pl-5'>Suspicious DLL</p>
-                            <p className='pl-5'>Unknown file activity</p>
-                            <p className='pl-5'>Potentially unwanted application</p>
-                            <p className='pl-5'>Unusual behavior detected</p>
-                            <p className='pl-5'>Browser hijack attempt</p>
-                            <p className='pl-5'>Abnormal script execution</p>
-                        </div>
-
-                        {/* HIGH */}
-                        <div className='border border-gray-700 rounded-md p-5 flex flex-col gap-2'>
-                            <div className='flex flex-row items-center gap-3 mb-2'>
-                                <div className='w-[10px] h-[10px] bg-orange-500 rounded-full mr-3'/>
-                                <p>HIGH</p>
-                            </div>
-
-                            <p className='pl-5'>Trojan detected</p>
-                            <p className='pl-5'>Spyware detected</p>
-                            <p className='pl-5'>Keylogger detected</p>
-                            <p className='pl-5'>Worm activity</p>
-                            <p className='pl-5'>Downloader malware</p>
-                            <p className='pl-5'>Credential theft attempt</p>
-                            <p className='pl-5'>Unauthorized execution detected</p>
-                            <p className='pl-5'>Persistence mechanism found</p>
-                            <p className='pl-5'>Malicious PowerShell activity</p>
-                        </div>
-
-                        {/* CRITICAL */}
-                        <div className='border border-gray-700 rounded-md p-5 flex flex-col gap-2'>
-                            <div className='flex flex-row items-center gap-3 mb-2'>
-                                <div className='w-[10px] h-[10px] bg-red-500 rounded-full mr-3'/>
-                                <p>CRITICAL</p>
-                            </div>
-
-                            <p className='pl-5'>Ransomware attempt</p>
-                            <p className='pl-5'>Privilege escalation detected</p>
-                            <p className='pl-5'>Mass infection detected</p>
-                            <p className='pl-5'>Remote exploit execution</p>
-                            <p className='pl-5'>Credential dumping activity</p>
-                            <p className='pl-5'>Active data exfiltration</p>
-                            <p className='pl-5'>Critical exploit detected</p>
-                            <p className='pl-5'>Lateral movement detected</p>
-                            <p className='pl-5'>Domain controller compromise</p>
-                            <p className='pl-5'>Command and control connection</p>
-                        </div>
-
-                    </div>
-                    </div>
-                    <button onClick={()=>{setSelectedMonth(false)}} className='rounded-lg flex flex-col p-3 items-center justify-center border-2 border-white bg-black hover:bg-gray-700'>
-                        <Image src="/close.png" alt="Logo" width={12} height={12} />
-                    </button>
+              <div className="rounded-xl border border-orange-500/30 bg-orange-500/10 p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-orange-400 font-bold">High</p>
+                  <p className="text-[26px] font-bold">{highCount}</p>
                 </div>
-            </>
-        )}
+                <p className="text-xs text-gray-500 mt-1">dangerous activity</p>
+              </div>
+
+              <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-yellow-300 font-bold">Warning</p>
+                  <p className="text-[26px] font-bold">{warningCount}</p>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">needs attention</p>
+              </div>
+
+              <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-green-400 font-bold">Safe</p>
+                  <p className="text-[26px] font-bold">{safeCount}</p>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">normal activity</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* MAIN STAT CARDS */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+          <div className="rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] to-[#120b2f] p-5">
+            <p className="text-gray-400 text-sm">Total Events</p>
+            <p className="font-bold text-[30px] mt-1">
+              12097
+            </p>
+            <p className="text-xs text-gray-500">All Data</p>
+          </div>
+
+          <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-5">
+            <p className="text-red-400 text-sm font-bold">Critical</p>
+            <p className="font-bold text-[30px] mt-1">
+              65
+            </p>
+            <p className="text-xs text-gray-500">Alert</p>
+          </div>
+
+          <div className="rounded-2xl border border-green-500/30 bg-green-500/10 p-5">
+            <p className="text-green-400 text-sm font-bold">Safe Rate</p>
+            <p className="font-bold text-[30px] mt-1">
+              92<span className="text-[16px] ml-1">%</span>
+            </p>
+            <p className="text-xs text-gray-500">Safe activity</p>
+          </div>
+
+          <div className="rounded-2xl border border-blue-500/30 bg-blue-500/10 p-5">
+            <p className="text-blue-300 text-sm font-bold">New / Hour</p>
+            <p className="font-bold text-[30px] mt-1">
+              104
+            </p>
+            <p className="text-xs text-gray-500">new data</p>
+          </div>
+        </div>
+
+        {/* TABLE + FEED */}
+        <div className="grid grid-cols-1 2xl:grid-cols-3 gap-5">
+
+          {/* TABLE */}
+          <div className="2xl:col-span-2 rounded-2xl border border-[#353b6c] bg-[#08071a] p-5">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+              <div>
+                <p className="font-bold text-[20px]">Event Detail</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Detail host, IP, malware, dan status deteksi.
+                </p>
+              </div>
+
+              <div className="px-3 py-2 rounded-lg border border-[#353b6c] bg-[#14122d] text-sm text-gray-400">
+                {dataEventDetail.length} records
+              </div>
+            </div>
+
+            <div className="w-full overflow-auto scrollbar-hide">
+              <div className="min-w-[850px]">
+                <div className="grid grid-cols-[90px_110px_1.2fr_1.2fr_1.4fr_120px] gap-3 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#14122d] text-gray-400 text-sm font-bold">
+                  <p>Time</p>
+                  <p>Event ID</p>
+                  <p>Host</p>
+                  <p>IP Address</p>
+                  <p>Malware</p>
+                  <p>Status</p>
+                </div>
+
+                <div className="h-[330px] overflow-auto scrollbar-hide mt-3 space-y-2">
+                  {dataEventDetail.map((item, index) => {
+                    const style = getStatusStyle(item.status)
+
+                    return (
+                      <div
+                        key={index}
+                        className={`
+                          grid grid-cols-[90px_110px_1.2fr_1.2fr_1.4fr_120px] gap-3
+                          items-center px-4 py-3 rounded-xl
+                          border border-[#353b6c]
+                          bg-[#0c0b20]
+                          transition-all duration-200
+                          ${style.row}
+                        `}
+                      >
+                        <p className="text-gray-300">{item.time}</p>
+                        <p className="text-gray-400">#{item.eventId}</p>
+                        <p className="font-semibold">{item.host}</p>
+                        <p className="text-blue-300">{item.ip}</p>
+                        <p className="text-gray-300">{item.malware}</p>
+                        <div
+                          className={`
+                            inline-flex items-center justify-center gap-2
+                            px-3 py-2 rounded-lg border text-xs font-bold
+                            ${style.badge}
+                          `}
+                        >
+                          <div className={`w-2 h-2 rounded-full ${style.dot}`} />
+                          {item.status}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RECENT FEED */}
+          <div className="rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] to-[#120b2f] p-5">
+            <div className="flex items-start justify-between gap-3 mb-5">
+              <div>
+                <p className="text-[20px] font-bold">Recent Events Feed</p>
+                <p className="text-gray-500 text-sm mt-1">
+                  Aktivitas terbaru dari sistem.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setSelectedMonth(true)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+              >
+                <p className="text-sm font-bold">Info</p>
+                <Image src="/info.png" alt="Info" width={12} height={12} />
+              </button>
+            </div>
+
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/10 mb-4">
+              <div className="relative flex items-center justify-center">
+                <div className="absolute w-3 h-3 bg-red-500 rounded-full animate-ping opacity-50" />
+                <div className="relative w-3 h-3 bg-red-500 rounded-full" />
+              </div>
+              <p className="text-sm text-red-400 font-bold">
+                2 critical events detected
+              </p>
+            </div>
+
+            <div className="h-[375px] overflow-auto scrollbar-hide space-y-3 pr-1">
+              {recentEvents.map((item, index) => {
+                const style = getStatusStyle(item.status)
+
+                return (
+                  <div
+                    key={index}
+                    className="relative flex gap-3 rounded-xl border border-[#353b6c] bg-[#0c0b20]/80 p-4 hover:bg-[#14122d] transition-all duration-200"
+                  >
+                    <div className="flex flex-col items-center">
+                      <div className="relative mt-1">
+                        {(item.status === "CRITICAL") && (
+                          <div className={`absolute w-3 h-3 rounded-full ${style.dot} animate-ping opacity-50`} />
+                        )}
+                        <div className={`relative w-3 h-3 rounded-full ${style.dot}`} />
+                      </div>
+
+                      {index !== recentEvents.length - 1 && (
+                        <div className="w-[1px] flex-1 bg-[#353b6c] mt-2" />
+                      )}
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className="font-bold text-sm">{item.time}</p>
+                        <span className={`px-2 py-1 rounded-md border text-[10px] font-bold ${style.badge}`}>
+                          {item.status}
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-gray-400">
+                        {item.text}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* MODAL INFO STATUS */}
+      {selectedMonth && (
+        <>
+          <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
+
+          <div className="fixed inset-0 z-50 flex justify-center items-start gap-3 pt-[130px] px-5">
+            <div className="w-full max-w-[760px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-7 shadow-2xl">
+              <div className="mb-6">
+                <p className="font-bold text-[24px]">Info Status Recent Events</p>
+                <p className="text-gray-500 mt-1">
+                  Berikut maksud warna status pada setiap data recent events.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[540px] overflow-auto scrollbar-hide pr-1">
+
+                {/* SAFE */}
+                <div className="rounded-2xl border border-green-500/30 bg-green-500/10 p-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-3 h-3 bg-green-400 rounded-full" />
+                    <p className="font-bold text-green-400">SAFE</p>
+                  </div>
+
+                  <div className="space-y-2 text-sm text-gray-300">
+                    <p>Clean activity</p>
+                    <p>Normal traffic</p>
+                    <p>Authorized access</p>
+                    <p>No threat detected</p>
+                    <p>Routine scan completed</p>
+                    <p>Policy compliance success</p>
+                    <p>Heartbeat received</p>
+                  </div>
+                </div>
+
+                {/* WARNING */}
+                <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-3 h-3 bg-yellow-400 rounded-full" />
+                    <p className="font-bold text-yellow-300">WARNING</p>
+                  </div>
+
+                  <div className="space-y-2 text-sm text-gray-300">
+                    <p>Adware detected</p>
+                    <p>Suspicious DLL</p>
+                    <p>Unknown file activity</p>
+                    <p>Potentially unwanted application</p>
+                    <p>Unusual behavior detected</p>
+                    <p>Browser hijack attempt</p>
+                    <p>Abnormal script execution</p>
+                  </div>
+                </div>
+
+                {/* HIGH */}
+                <div className="rounded-2xl border border-orange-500/30 bg-orange-500/10 p-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full" />
+                    <p className="font-bold text-orange-400">HIGH</p>
+                  </div>
+
+                  <div className="space-y-2 text-sm text-gray-300">
+                    <p>Trojan detected</p>
+                    <p>Spyware detected</p>
+                    <p>Keylogger detected</p>
+                    <p>Worm activity</p>
+                    <p>Downloader malware</p>
+                    <p>Credential theft attempt</p>
+                    <p>Unauthorized execution detected</p>
+                    <p>Persistence mechanism found</p>
+                    <p>Malicious PowerShell activity</p>
+                  </div>
+                </div>
+
+                {/* CRITICAL */}
+                <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="relative flex items-center justify-center">
+                      <div className="absolute w-3 h-3 bg-red-500 rounded-full animate-ping opacity-50" />
+                      <div className="relative w-3 h-3 bg-red-500 rounded-full" />
+                    </div>
+                    <p className="font-bold text-red-400">CRITICAL</p>
+                  </div>
+
+                  <div className="space-y-2 text-sm text-gray-300">
+                    <p>Ransomware attempt</p>
+                    <p>Privilege escalation detected</p>
+                    <p>Mass infection detected</p>
+                    <p>Remote exploit execution</p>
+                    <p>Credential dumping activity</p>
+                    <p>Active data exfiltration</p>
+                    <p>Critical exploit detected</p>
+                    <p>Lateral movement detected</p>
+                    <p>Domain controller compromise</p>
+                    <p>Command and control connection</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <button
+              onClick={() => setSelectedMonth(false)}
+              className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+            >
+              <Image src="/close.png" alt="Close" width={12} height={12} />
+            </button>
+          </div>
+        </>
+      )}
     </>
   )
 }

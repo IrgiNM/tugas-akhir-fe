@@ -27,7 +27,7 @@ const page = () => {
 
   return (
     <>
-      <div className='w-full relative h-screen flex flex-col gap-3 items-center bg-[#120b2f]'>
+      <div className='w-full relative h-full flex flex-col gap-3 items-center bg-[#070616]'>
           <Header></Header>
           <Navbar 
             click1={() => setIsActive('Top Reports')}
