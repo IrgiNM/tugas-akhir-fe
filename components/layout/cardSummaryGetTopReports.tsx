@@ -553,9 +553,9 @@ const CardSummaryGetTopReports = () => {
           {/* MODAL VIEW */}
           {selectedView && (
             <>
-                <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
+                <div className="fixed inset-0 z-70 bg-[#0c0b20]/90 backdrop-blur-sm" />
 
-                <div className="fixed inset-0 z-50 flex justify-center items-start gap-3 pt-[160px] px-5">
+                <div className="fixed inset-0 z-80 flex justify-center items-start gap-3 pt-[160px] px-5">
                 <div className="w-full max-w-[650px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-7 shadow-2xl">
 
                     <div className="mb-6">
@@ -674,9 +674,9 @@ const CardSummaryGetTopReports = () => {
           {/* MODAL GEO LOCATION */}
           {isDetailIp && (
             <>
-              <div className="fixed inset-0 z-40 bg-[#0c0b20]/85 backdrop-blur-sm" />
+              <div className="fixed inset-0 z-70 bg-[#0c0b20]/85 backdrop-blur-sm" />
       
-              <div className="fixed inset-0 z-50 flex justify-center items-start pt-[110px] px-5 gap-3">
+              <div className="fixed inset-0 z-80 flex justify-center items-start pt-[110px] px-5 gap-3">
                 <div className="w-full max-w-[980px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-6 shadow-2xl">
                   <div className="mb-5">
                     <p className="font-bold text-[24px]">IP Geolocation Detail</p>
@@ -738,9 +738,9 @@ const CardSummaryGetTopReports = () => {
           {/* MODAL DATE */}
           {selectedDate && (
             <>
-              <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
+              <div className="fixed inset-0 z-70 bg-[#0c0b20]/90 backdrop-blur-sm" />
       
-              <div className="fixed inset-0 z-50 flex justify-center items-start gap-3 pt-[170px] px-5">
+              <div className="fixed inset-0 z-80 flex justify-center items-start gap-3 pt-[170px] px-5">
                 <div className="w-full max-w-[620px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-7 shadow-2xl">
                   <p className="font-bold text-[24px]">Available Report Dates</p>
                   <p className="text-gray-500 mt-1 mb-6">
@@ -826,9 +826,9 @@ const CardSummaryGetTopReports = () => {
           {/* MODAL MONTH */}
           {selectedMonth && (
             <>
-              <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
+              <div className="fixed inset-0 z-70 bg-[#0c0b20]/90 backdrop-blur-sm" />
       
-              <div className="fixed inset-0 z-50 flex justify-center items-start gap-3 pt-[170px] px-5">
+              <div className="fixed inset-0 z-80 flex justify-center items-start gap-3 pt-[170px] px-5">
                 <div className="w-full max-w-[520px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-7 shadow-2xl">
                   <p className="font-bold text-[24px]">Available Report Months</p>
                   <p className="text-gray-500 mt-1 mb-6">

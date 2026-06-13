@@ -359,9 +359,9 @@ const DashboardDeviceUserActivityInformation = () => {
       {/* DEVICE DETAIL MODAL */}
       {selectedDevice && (
         <>
-          <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
+          <div className="fixed inset-0 z-70 bg-[#0c0b20]/90 backdrop-blur-sm" />
 
-          <div className="fixed inset-0 z-50 flex justify-center items-start pt-[90px] px-5">
+          <div className="fixed inset-0 z-80 flex justify-center items-start pt-[90px] px-5">
             <div className="w-full max-w-[1200px] max-h-[88vh] overflow-auto scrollbar-hide rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-6 shadow-2xl">
 
               {/* MODAL HEADER */}

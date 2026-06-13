@@ -2,6 +2,7 @@ import { loginType } from "@/type/loginType";
 import { registerType } from "@/type/registerType";
 import axios from "axios";
 import { getToken } from "./token";
+import { permissionType } from "@/type/permissionType";
 
 export const BASEURL = process.env.NEXT_PUBLIC_API_URL + "/";
 
@@ -30,6 +31,13 @@ export const login = (data: loginType) => axios.post(`${BASEURL}api/login/`, dat
 // export const login = (data: loginType) => api.post("api/login/", data);
 export const register = (data: registerType) => api.post("api/user/create/", data);
 export const getUser = () => api.get("api/user/get/");
+export const getMe = () => api.get("api/user/me/");
+export const deleteUser = (id: number) => api.delete(`api/user/delete/${id}/`);
+
+// PERMISSION
+export const createPermission = (data: permissionType) => api.post(`api/permission/create/`, data);
+export const getPermission = (id: number) => api.get(`api/permission/list/${id}/`);
+export const deletePermissionUser = (id: number) => api.delete(`api/permission/delete/${id}/`);
 
 export const getListNetworkTraffic = () => api.get("api/networkTraffic/list/");
 export const uploadFileCSV = (data: FormData) => api.post("api/uploadCSV/", data);

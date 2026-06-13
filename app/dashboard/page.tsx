@@ -5,7 +5,8 @@ import DataUser from '@/components/ui/dataUser';
 import GetLogPage from '@/components/ui/getLogPage';
 import SecurityEventsPage from '@/components/ui/securityEventsPage';
 import { dataNetworkTrafficFunction } from '@/lib/data/dataNetworkTrafficFunction';
-import { getToken } from '@/lib/function/token';
+import { getMe, getPermission } from '@/lib/function/api';
+import { getToken, setIdUserToken, setUsernameToken } from '@/lib/function/token';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -17,13 +18,46 @@ const page = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const {dataNerworkTraffic} = dataNetworkTrafficFunction()
+  const [permissionsNow, setPermissionsNow] = useState<string[]>([]);
 
   useEffect(()=>{
-      const token = getToken();
-      if(!token){
-        router.push('/');
+    const token = getToken();
+    if(!token){
+      router.push('/');
+    }
+  }, [])
+
+  useEffect(()=>{
+    const fetch = async () => {
+      const res = await getMe();
+      if(res.status === 200){
+        setUsernameToken(res.data.username)
+        setIdUserToken(res.data.id)
+        
       }
-    }, [])
+    }
+    fetch();
+  }, [])
+
+  useEffect(()=>{
+    const fetch = async () => {
+      const id = localStorage.getItem("id_user");
+      const res = await getPermission(Number(id));
+      if(res.status === 200){
+        const permissions: string[] = res.data.map(
+          (item: { name: string }) => item.name
+        );
+        setPermissionsNow(permissions);
+        localStorage.setItem(
+          "permission",
+          JSON.stringify(permissions)
+        );
+      }
+    }
+    fetch();
+  }, [])
+
+  
 
   return (
     <>
@@ -37,10 +71,10 @@ const page = () => {
             isActived={isActive}
           ></Navbar>
           <div className='h-[80%] w-full'>
-            {isActive==='Top Reports'&&(
+            {(isActive==='Top Reports' && permissionsNow.includes("top reports"))&&(
               <GetLogPage click1={()=>{setIsLoading(true)}} />
             )}
-            {isActive==='Security Events'&&(
+            {(isActive==='Security Events' && permissionsNow.includes("security event"))&&(
               <SecurityEventsPage />
             )}
             {isActive==='Data User'&&(

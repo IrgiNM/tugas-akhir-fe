@@ -495,9 +495,9 @@ const DashboardEventInformation = () => {
       {/* MODAL INFO STATUS */}
       {selectedMonth && (
         <>
-          <div className="fixed inset-0 z-40 bg-[#0c0b20]/90 backdrop-blur-sm" />
+          <div className="fixed inset-0 z-70 bg-[#0c0b20]/90 backdrop-blur-sm" />
 
-          <div className="fixed inset-0 z-50 flex justify-center items-start gap-3 pt-[130px] px-5">
+          <div className="fixed inset-0 z-80 flex justify-center items-start gap-3 pt-[130px] px-5">
             <div className="w-full max-w-[760px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-7 shadow-2xl">
               <div className="mb-6">
                 <p className="font-bold text-[24px]">Info Status Recent Events</p>

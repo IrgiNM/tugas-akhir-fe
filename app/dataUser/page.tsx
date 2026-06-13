@@ -1,5 +1,7 @@
 'use client'
 
+import Header from '@/components/layout/header'
+import Navbar from '@/components/layout/navbar'
 import dataPermission from '@/lib/data/dataPermission'
 import { createPermission, deletePermissionUser, deleteUser, getPermission } from '@/lib/function/api'
 import { CreateUser, GetDataUser } from '@/lib/function/userFunction'
@@ -183,6 +185,8 @@ const DataUser = () => {
 
   return (
     <div className="w-full min-h-screen px-6 md:px-10 pt-[135px] pb-10 bg-[#070616] text-white">
+      <Header></Header>
+      <Navbar></Navbar>
 
       {/* Main Container */}
       <div className="w-full rounded-xl border-[.5px] border-[#353b6c] bg-[#0c0b20] p-6 md:p-8 shadow-xl shadow-black/30">

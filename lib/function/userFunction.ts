@@ -2,13 +2,20 @@ import { loginType } from "@/type/loginType";
 import { registerType } from "@/type/registerType";
 import { userGetType } from "@/type/userGetType";
 import { useEffect, useState } from "react";
-import { getUser, login, register } from "./api";
+import { createPermission, getMe, getUser, login, register } from "./api";
 import { setToken } from "./token";
 
 export const CreateUser = async (data: registerType) => {
     try{
         const res = await register(data);
         if(res.status === 201){
+            const res3 = await createPermission({
+                user: res.data.id,
+                name: 'top reports',
+            })
+            if(res3.status === 201){
+                alert('Berhasil membuat permission')
+            }
             return 'berhasil membuat user'
         }
         if(res.status === 400){
