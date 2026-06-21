@@ -1,60 +1,60 @@
-import { dataLogDatasetType } from '@/type/dataLogDatasetType';
-import { useEffect, useState } from 'react';
-import { getLogDataset } from '../function/api';
+// import { dataLogDatasetType } from '@/type/dataLogDatasetType';
+// import { useEffect, useState } from 'react';
+// import { getLogDataset } from '../function/api';
 
-const DataLogDatasetFunction = (selectedDate?: string) => {
-    const [dataLogDataset, setDataLogDataset] = useState<dataLogDatasetType[]>([])
-    const [dataMalwareCount, setDataMalwareCount] = useState<string[]>([])
-    const [dataBenignCount, setDataBenignCount] = useState<string[]>([])
-    const [dataCreatedAt, setDataCreatedAt] = useState<string[]>([])
+// const DataLogDatasetFunction = (selectedDate?: string) => {
+//     const [dataLogDataset, setDataLogDataset] = useState<dataLogDatasetType[]>([])
+//     const [dataMalwareCount, setDataMalwareCount] = useState<string[]>([])
+//     const [dataBenignCount, setDataBenignCount] = useState<string[]>([])
+//     const [dataCreatedAt, setDataCreatedAt] = useState<string[]>([])
 
-    useEffect(() => {
-        const fetch = async () => {
-            // Kosongkan data sebelumnya sebelum memuat data baru
-            setDataLogDataset([]);
+//     useEffect(() => {
+//         const fetch = async () => {
+//             // Kosongkan data sebelumnya sebelum memuat data baru
+//             setDataLogDataset([]);
     
-            const res = await getLogDataset(selectedDate);
+//             const res = await getLogDataset(selectedDate);
     
-            if (res.status === 200) {
-                setDataLogDataset(res.data);
-            }
-        };
+//             if (res.status === 200) {
+//                 setDataLogDataset(res.data);
+//             }
+//         };
     
-        fetch();
-    }, [selectedDate]);
+//         fetch();
+//     }, [selectedDate]);
 
-    useEffect(() => {
-        const malwareLabels = dataLogDataset
-            .map((item) => item.label)
-            .filter((label) => label && label !== "Benign");
+//     useEffect(() => {
+//         const malwareLabels = dataLogDataset
+//             .map((item) => item.label)
+//             .filter((label) => label && label !== "Benign");
     
-        setDataMalwareCount(malwareLabels);
-    }, [dataLogDataset]);
+//         setDataMalwareCount(malwareLabels);
+//     }, [dataLogDataset]);
     
-    useEffect(() => {
-        const benignLabels = dataLogDataset
-            .map((item) => item.label)
-            .filter((label) => label && label === "Benign");
+//     useEffect(() => {
+//         const benignLabels = dataLogDataset
+//             .map((item) => item.label)
+//             .filter((label) => label && label === "Benign");
     
-        setDataBenignCount(benignLabels);
-    }, [dataLogDataset]);
+//         setDataBenignCount(benignLabels);
+//     }, [dataLogDataset]);
 
-    useEffect(() => {
-        const dates = Array.from(
-            new Set(
-                dataLogDataset
-                    .filter((item) => item.created_at)
-                    .map((item) => item.created_at.split("T")[0])
-            )
-        );
-        setDataCreatedAt(dates);
-    }, [dataLogDataset]);
+//     useEffect(() => {
+//         const dates = Array.from(
+//             new Set(
+//                 dataLogDataset
+//                     .filter((item) => item.created_at)
+//                     .map((item) => item.created_at.split("T")[0])
+//             )
+//         );
+//         setDataCreatedAt(dates);
+//     }, [dataLogDataset]);
 
-    useEffect(()=>{
-        console.error('data created at', dataCreatedAt);
-    }, [dataCreatedAt])
+//     useEffect(()=>{
+//         console.error('data created at', dataCreatedAt);
+//     }, [dataCreatedAt])
 
-    return {dataLogDataset, dataMalwareCount, dataBenignCount, dataCreatedAt}
-}
+//     return {dataLogDataset, dataMalwareCount, dataBenignCount, dataCreatedAt}
+// }
 
-export default DataLogDatasetFunction
+// export default DataLogDatasetFunction

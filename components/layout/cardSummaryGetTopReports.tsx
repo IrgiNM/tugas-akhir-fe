@@ -7,8 +7,9 @@ import { nameDataTopType } from '@/type/nameDataTopType'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import GeoMap from '../sections/geoMap'
+
 import TableTopReports from './tableTopReports'
+import GeoMap from '../sections/geoMapWrapper'
 
 
 const CardSummaryGetTopReports = () => {
@@ -113,34 +114,6 @@ const CardSummaryGetTopReports = () => {
         setPickMonthTop(month);
         setPickYearTop(year);
     }, [])
-
-    const handleBackup = async () => {
-      try {
-        const response = await backupDatabase();
-    
-        const url = window.URL.createObjectURL(
-          new Blob([response.data])
-        );
-    
-        const link = document.createElement("a");
-        link.href = url;
-    
-        const filename = `backup_${new Date()
-          .toISOString()
-          .replace(/[:.]/g, "-")}.dump`;
-    
-        link.setAttribute("download", filename);
-    
-        document.body.appendChild(link);
-        link.click();
-    
-        link.remove();
-    
-        window.URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
     const formatTopName = (value: string) => {
       return value
@@ -466,87 +439,6 @@ const CardSummaryGetTopReports = () => {
                   ))}
                 </LineChart>
               </ResponsiveContainer>
-            </div>
-          </div>
-      
-          {/* BACKUP */}
-          <div className="w-full rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] to-[#120b2f] p-6">
-            <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5 mb-6">
-              <div>
-                <p className="font-bold text-[24px]">
-                  Backup Top Blocked Data
-                </p>
-                <p className="text-gray-400 mt-2">
-                  Export top blocked log data berdasarkan rentang waktu yang dipilih.
-                </p>
-              </div>
-      
-              <button
-                onClick={() => handleBackup()}
-                className="flex items-center justify-center gap-4 px-8 py-3 rounded-xl bg-gradient-to-b from-[#2563eb] to-[#1e40af] border border-blue-500 shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all duration-200"
-              >
-                <p className="font-bold">Backup Now</p>
-                <Image src="/download.png" alt="Download" width={18} height={18} />
-              </button>
-            </div>
-      
-            <div className="rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-5">
-              <p className="font-semibold text-white mb-4">Backup Period</p>
-      
-              <div className="flex flex-col lg:flex-row lg:items-center gap-4 mb-5">
-                <button
-                  onClick={() => setSelectedDate(true)}
-                  className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200 group"
-                >
-                  <div className="text-left">
-                    <p className="text-xs text-gray-500">Start Date</p>
-                    <p className="font-bold">
-                      {pickBackupAwalYear}-{pickBackupAwalMonth}-{pickBackupAwalDate}
-                    </p>
-                  </div>
-                  <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
-                </button>
-      
-                <div className="hidden lg:flex w-[42px] h-[42px] rounded-full border border-[#353b6c] bg-[#14122d] items-center justify-center">
-                  <Image src="/arrow-right.png" alt="Arrow" width={18} height={18} />
-                </div>
-      
-                <button
-                  onClick={() => setSelectedDate(true)}
-                  className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200 group"
-                >
-                  <div className="text-left">
-                    <p className="text-xs text-gray-500">End Date</p>
-                    <p className="font-bold">
-                      {pickBackupAkhirYear}-{pickBackupAkhirMonth}-{pickBackupAkhirDate}
-                    </p>
-                  </div>
-                  <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
-                </button>
-              </div>
-      
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="p-4 rounded-xl border border-[#353b6c] bg-[#14122d]">
-                  <p className="text-gray-400 text-sm">Records Found</p>
-                  <p className="text-[24px] font-bold mt-1">12,456</p>
-                </div>
-      
-                <div className="p-4 rounded-xl border border-[#353b6c] bg-[#14122d]">
-                  <p className="text-gray-400 text-sm">Estimated Size</p>
-                  <p className="text-[24px] font-bold mt-1">24 MB</p>
-                </div>
-      
-                <div className="p-4 rounded-xl border border-[#353b6c] bg-[#14122d]">
-                  <p className="text-gray-400 text-sm">Format</p>
-                  <p className="text-[24px] font-bold mt-1">CSV</p>
-                </div>
-              </div>
-      
-              <div className="p-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10">
-                <p className="text-yellow-300 text-sm">
-                  Only data within the selected date range will be included in the backup file.
-                </p>
-              </div>
             </div>
           </div>
       

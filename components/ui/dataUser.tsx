@@ -18,6 +18,7 @@ const permissionOptions = [
   'security event',
   'geolocation',
   'device user',
+  'backup database',
 ]
 
 const DataUser = () => {
@@ -679,9 +680,9 @@ const DataUser = () => {
 
                 <div className="flex flex-col sm:flex-row gap-3">
                 <select
-                    value={selectedPermission}
-                    onChange={(e) => setSelectedPermission(e.target.value)}
-                    className="
+                  value={selectedPermission}
+                  onChange={(e) => setSelectedPermission(e.target.value)}
+                  className="
                     flex-1
                     px-4 py-3
                     rounded-md
@@ -691,13 +692,15 @@ const DataUser = () => {
                     text-white
                     focus:border-white
                     transition-all duration-200
-                    "
+                  "
                 >
-                    {permissionOptions.map((option) => (
+                  <option value="">Pilih permission</option>
+
+                  {permissionOptions.map((option) => (
                     <option key={option} value={option}>
-                        {option}
+                      {option}
                     </option>
-                    ))}
+                  ))}
                 </select>
 
                 <button

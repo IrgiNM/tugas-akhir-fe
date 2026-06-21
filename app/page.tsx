@@ -14,8 +14,19 @@ const Page = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const handleLogin = async (e?: React.FormEvent) => {
-    e?.preventDefault()
+  useEffect(() => {
+    const token = getToken()
+
+    if (token) {
+      router.push('/dashboard')
+    }
+  }, [router])
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+  
+    if (isLoading) return
+  
     setError('')
   
     if (!username || !password) {
@@ -43,38 +54,34 @@ const Page = () => {
             )
   
             localStorage.setItem(
-              "permission",
+              'permission',
               JSON.stringify(permissions)
             )
           }
-        }
   
-        setUsername('')
-        setPassword('')
-
-        if(res2.data.is_staff === true) {
-          router.push('/dataUser')
-        }else{
-          router.push('/dashboard')
-        }
+          setUsername('')
+          setPassword('')
   
+          if (res2.data.is_staff === true) {
+            router.push('/dataUser')
+          } else {
+            router.push('/dashboard')
+          }
+        } else {
+          setError('Gagal mengambil data user.')
+        }
       } else {
         setError('Username atau password salah.')
       }
     } catch (error) {
+      console.error(error)
       setError('Terjadi kesalahan saat login.')
     } finally {
       setIsLoading(false)
     }
   }
 
-  useEffect(() => {
-    const token = getToken()
-
-    if (token) {
-      router.push('/dashboard')
-    }
-  }, [router])
+  
 
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-[#070616] px-5">

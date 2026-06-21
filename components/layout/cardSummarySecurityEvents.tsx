@@ -6,22 +6,81 @@ import { useState } from 'react'
 import DashboardDeviceUserActivityInformation from './dashboardDeviceUserActivityInformation'
 import DashboardEventInformation from './dashboardEventInformation'
 import NavbarSecurityEvent from './navbarSecurityEvent'
+import DashboardTrafficMonitoring from './dashboardTrafficMonitoring'
+import DashboardWebApplicationMonitoring from './dashboardWebApplicationMonitoring'
+import DashboardClientMonitoring from './dashboardClientMonitoring'
+import DashboardDestinationMonitoring from './dashboardDestinationMonitoring'
+import DashboardNetworkSystemAlarm from './dashboardNetworkSystemAlarm'
+import { fetchSyslogLogs } from '@/lib/function/api'
+import useSyslogLogs from '@/lib/data/dataSyslogLogs'
 
 const CardSummarySecurityEvents = () => {
   const [selectedDate, setSelectedDate] = useState<boolean>(false)
 
-  const [pickDateTop, setPickDateTop] = useState<string>('')
-  const [pickMonthTop, setPickMonthTop] = useState<string>('')
-  const [pickYearTop, setPickYearTop] = useState<string>('')
+  const [refreshSyslogKey, setRefreshSyslogKey] = useState<number>(0)
+  const [isFetchingSyslog, setIsFetchingSyslog] = useState<boolean>(false)
+
+  const handleFetchSyslog = async () => {
+    setIsFetchingSyslog(true)
+  
+    try {
+      const res = await fetchSyslogLogs(selectedFullDate)
+  
+      if (res.status === 200) {
+        setRefreshSyslogKey((prev) => prev + 1)
+  
+        alert(
+          `Fetch syslog selesai. Created: ${res.data.result.created}, Skipped: ${res.data.result.skipped}`
+        )
+      }
+    } catch (error) {
+      console.error("Error fetching syslog:", error)
+      alert("Gagal fetch syslog")
+    } finally {
+      setIsFetchingSyslog(false)
+    }
+  }
+
+  const today = new Date()
+
+  const [pickDateTop, setPickDateTop] = useState<string>(
+    String(today.getDate()).padStart(2, "0")
+  )
+
+  const [pickMonthTop, setPickMonthTop] = useState<string>(
+    String(today.getMonth() + 1).padStart(2, "0")
+  )
+
+  const [pickYearTop, setPickYearTop] = useState<string>(
+    String(today.getFullYear())
+  )
+
+  const selectedFullDate = `${pickYearTop}-${pickMonthTop}-${pickDateTop}`
 
   const {
-    dataTopReports,
+    syslogLogs,
+  } = useSyslogLogs(
+    {
+      date: selectedFullDate,
+    },
+    refreshSyslogKey
+  )
+  
+  const {
     dataDateAt,
     dataMonthAt,
     dataYearAt,
-  } = DataTopReportsFunction(pickDateTop, pickMonthTop, pickYearTop)
+  } = useSyslogLogs(
+    {
+      year: pickYearTop,
+      month: pickMonthTop,
+    },
+    refreshSyslogKey
+  )
 
-  const [pickNavbar, setPickNavbar] = useState<string>('Event Information')
+  
+
+  const [pickNavbar, setPickNavbar] = useState<string>('Dashboard Overview')
 
   return (
     <div className="w-full mt-[135px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-6 md:p-8 text-white shadow-2xl shadow-black/30">
@@ -49,13 +108,27 @@ const CardSummarySecurityEvents = () => {
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button
+              onClick={handleFetchSyslog}
+              disabled={isFetchingSyslog}
+              className={`
+                flex items-center justify-center gap-3 px-4 py-3 rounded-xl 
+                border border-blue-500/30 bg-blue-500/10 
+                text-blue-300 font-bold 
+                hover:bg-blue-500/20 transition-all duration-200
+                ${isFetchingSyslog ? "opacity-60 cursor-not-allowed" : ""}
+              `}
+            >
+              {isFetchingSyslog ? "Fetching..." : "Fetch Manual"}
+            </button>
+
+            <button
               onClick={() => setSelectedDate(true)}
               className="flex items-center justify-between gap-4 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#0c0b20]/80 hover:bg-[#353b6c] transition-all duration-200"
             >
               <div className="text-left">
                 <p className="text-xs text-gray-500">Selected Date</p>
                 <p className="font-bold">
-                  {pickYearTop || '0000'}-{pickMonthTop || '00'}-{pickDateTop || '00'}
+                  {pickYearTop}-{pickMonthTop}-{pickDateTop}
                 </p>
               </div>
 
@@ -66,7 +139,7 @@ const CardSummarySecurityEvents = () => {
               <div>
                 <p className="text-xs text-gray-500">Total Data</p>
                 <p className="font-bold">
-                  {dataTopReports.length} data/hari
+                  {syslogLogs.length} data/hari
                 </p>
               </div>
 
@@ -104,8 +177,58 @@ const CardSummarySecurityEvents = () => {
           </div>
         </div>
 
-        {pickNavbar === 'Event Information' && (
-          <DashboardEventInformation />
+        {pickNavbar === 'Dashboard Overview' && (
+          <DashboardEventInformation
+            pickDateTop={pickDateTop}
+            pickMonthTop={pickMonthTop}
+            pickYearTop={pickYearTop}
+            refreshSyslogKey={refreshSyslogKey}
+          />
+        )}
+        
+        {pickNavbar === 'Traffic Monitoring' && (
+          <DashboardTrafficMonitoring
+            pickDateTop={pickDateTop}
+            pickMonthTop={pickMonthTop}
+            pickYearTop={pickYearTop}
+            refreshSyslogKey={refreshSyslogKey}
+          />
+        )}
+        
+        {pickNavbar === 'Web & Application Monitoring' && (
+          <DashboardWebApplicationMonitoring
+            pickDateTop={pickDateTop}
+            pickMonthTop={pickMonthTop}
+            pickYearTop={pickYearTop}
+            refreshSyslogKey={refreshSyslogKey}
+          />
+        )}
+        
+        {pickNavbar === 'Client Monitoring' && (
+          <DashboardClientMonitoring
+            pickDateTop={pickDateTop}
+            pickMonthTop={pickMonthTop}
+            pickYearTop={pickYearTop}
+            refreshSyslogKey={refreshSyslogKey}
+          />
+        )}
+        
+        {pickNavbar === 'Destination Monitoring' && (
+          <DashboardDestinationMonitoring
+            pickDateTop={pickDateTop}
+            pickMonthTop={pickMonthTop}
+            pickYearTop={pickYearTop}
+            refreshSyslogKey={refreshSyslogKey}
+          />
+        )}
+        
+        {pickNavbar === 'Network & System Alarm' && (
+          <DashboardNetworkSystemAlarm
+            pickDateTop={pickDateTop}
+            pickMonthTop={pickMonthTop}
+            pickYearTop={pickYearTop}
+            refreshSyslogKey={refreshSyslogKey}
+          />
         )}
 
         {pickNavbar === 'Device User Activity Information' && (
@@ -137,7 +260,6 @@ const CardSummarySecurityEvents = () => {
                         key={index}
                         onClick={() => {
                           setPickYearTop(item)
-                          setSelectedDate(false)
                         }}
                         className="w-full p-3 rounded-lg border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200"
                       >
@@ -158,7 +280,6 @@ const CardSummarySecurityEvents = () => {
                         key={index}
                         onClick={() => {
                           setPickMonthTop(item)
-                          setSelectedDate(false)
                         }}
                         className="w-full p-3 rounded-lg border border-[#353b6c] bg-[#14122d] hover:bg-[#353b6c] transition-all duration-200"
                       >

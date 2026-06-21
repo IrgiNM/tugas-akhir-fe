@@ -63,6 +63,22 @@ const Navbar = ({ click1, click4, click3, click2, isActived }: NavbarType) => {
             picked={isActived}
           />
         )}
+        
+        {permissionsNow.includes("backup database") && (
+          <ButtonAction
+            onKlik={click3}
+            label="Backup"
+            picked={isActived}
+          />
+        )}
+        
+        {permissionsNow.includes("dataset") && (
+          <ButtonAction
+            onKlik={click4}
+            label="Dataset"
+            picked={isActived}
+          />
+        )}
 
         {userPage && (
           <ButtonAction
