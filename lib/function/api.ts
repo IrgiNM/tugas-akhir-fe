@@ -5,9 +5,8 @@ import { getToken } from "./token";
 import { permissionType } from "@/type/permissionType";
 import { SyslogLogFilterType } from "@/type/syslogLogType";
 
-export const BASEURL = process.env.NEXT_PUBLIC_API_URL
-  ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "")}/`
-  : "";
+
+export const BASEURL = `${"https://tugas-akhir-be-production.up.railway.app".replace(/\/$/, "")}/`;
 
 export const api = axios.create({
   baseURL: BASEURL,
@@ -113,29 +112,17 @@ export const createSyslogDataset = (date?: string) => {
   );
 };
 
-export const downloadSyslogDataset = async (filename: string) => {
-  if (typeof window === "undefined") return;
+export const downloadSyslogDataset = (fileUrl: string, filename: string) => {
+  if (typeof window === "undefined") return
 
-  const response = await api.get(
-    `detection/syslog-dataset/download/${filename}/`,
-    {
-      responseType: "blob",
-    }
-  );
+  const link = document.createElement("a")
 
-  const blob = new Blob([response.data], {
-    type: "text/csv",
-  });
+  link.href = fileUrl
+  link.setAttribute("download", filename)
+  link.setAttribute("target", "_blank")
+  link.setAttribute("rel", "noopener noreferrer")
 
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
-
-  link.href = url;
-  link.setAttribute("download", filename);
-
-  document.body.appendChild(link);
-  link.click();
-
-  link.remove();
-  window.URL.revokeObjectURL(url);
-};
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+}

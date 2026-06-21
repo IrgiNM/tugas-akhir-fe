@@ -103,9 +103,14 @@ export const useDataDataset = () => {
     setIsLoading(true)
     setMessage('')
     setError('')
-
+  
     try {
-      await downloadSyslogDataset(item.file_name)
+      if (!item.file_path) {
+        setError('URL file dataset tidak ditemukan.')
+        return
+      }
+  
+      downloadSyslogDataset(item.file_path, item.file_name)
     } catch (err) {
       console.error(err)
       setError('Gagal download dataset.')
