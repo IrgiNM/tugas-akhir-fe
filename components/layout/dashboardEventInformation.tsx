@@ -1,17 +1,16 @@
 "use client"
 
 import useSyslogLogs from "@/lib/data/dataSyslogLogs"
-import { fetchSyslogLogs } from "@/lib/function/api"
 import Image from "next/image"
 import { useState } from "react"
 import {
+  CartesianGrid,
   Line,
   LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
 } from "recharts"
 
 type DashboardEventInformationProps = {
@@ -29,16 +28,6 @@ const DashboardEventInformation = ({
 }: DashboardEventInformationProps) => {
   const [selectedMonth, setSelectedMonth] = useState<boolean>(false)
   const [selectedAction, setSelectedAction] = useState<string>("All")
-
-  const getTodayDate = () => {
-    const today = new Date()
-  
-    const year = today.getFullYear()
-    const month = String(today.getMonth() + 1).padStart(2, "0")
-    const date = String(today.getDate()).padStart(2, "0")
-  
-    return `${year}-${month}-${date}`
-  }
 
   const selectedFullDate = `${pickYearTop}-${pickMonthTop}-${pickDateTop}`
 

@@ -1,8 +1,10 @@
 "use client"
 
+import dataGeoLocationIP from "@/lib/data/dataGeoLocationIP"
 import useSyslogLogs from "@/lib/data/dataSyslogLogs"
 import Image from "next/image"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import GeoMap from "../sections/geoMapWrapper"
 
 type DestinationType = {
   id: number
@@ -48,8 +50,19 @@ const DashboardDestinationMonitoring = ({
 }: DashboardDestinationMonitoringProps) => {
   const [selectedInfo, setSelectedInfo] = useState<boolean>(false)
   const [selectedDestination, setSelectedDestination] = useState<DestinationType | null>(null)
+  const [pickIP, setPickIP] = useState<string>('')
+  const {dataGeo} = dataGeoLocationIP(pickIP)
+  const [isDetailIp, setIsDetailIp] = useState<boolean>(false)
 
   const selectedFullDate = `${pickYearTop}-${pickMonthTop}-${pickDateTop}`
+  const [permissionsNow, setPermissionsNow] = useState<string[]>([]);
+  
+    useEffect(() => {
+      const storedPermissions = localStorage.getItem("permission");
+      if (storedPermissions) {
+        setPermissionsNow(JSON.parse(storedPermissions));
+      }
+    }, []);
 
   const {
     syslogLogs,
@@ -408,7 +421,10 @@ const DashboardDestinationMonitoring = ({
                   return (
                     <button
                       key={item.destinationIp}
-                      onClick={() => setSelectedDestination(item)}
+                      onClick={() => {
+                        setSelectedDestination(item)
+                        setPickIP(item.destinationIp)
+                      }}
                       className={`
                         w-full text-left rounded-2xl border p-4
                         bg-[#0c0b20]
@@ -500,9 +516,22 @@ const DashboardDestinationMonitoring = ({
                       Destination Detail
                     </p>
 
-                    <p className="font-bold text-[26px] mt-1">
-                      {selectedDestination.destinationIp}
-                    </p>
+                    <div className="font-bold text-[26px] mt-1 flex flex-row gap-3">
+                      <p>
+                        {selectedDestination.destinationIp}
+                      </p>
+                      {permissionsNow.includes("geolocation")&&(
+                        <button
+                          onClick={() => setIsDetailIp(true)}
+                          className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] hover:scale-[1.02] transition-all duration-200 shadow-lg shadow-blue-500/20 group"
+                        >
+                          <div className="text-left">
+                            <p className="text-[12px] text-blue-200 font-bold">GeoMap</p>
+                          </div>
+                          <Image src="/map.png" alt="Arrow" width={10} height={10} />
+                        </button>
+                      )}
+                    </div>
 
                     <p className="text-gray-500 mt-1 truncate">
                       {selectedDestination.domain}
@@ -674,6 +703,71 @@ const DashboardDestinationMonitoring = ({
               className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
             >
               <Image src="/close.png" alt="Close" width={12} height={12} />
+            </button>
+          </div>
+        </>
+      )}
+
+
+      {/* MODAL GEO LOCATION */}
+      {isDetailIp && (
+        <>
+          <div className="fixed inset-0 z-70 bg-[#0c0b20]/85 backdrop-blur-sm" />
+
+          <div className="fixed inset-0 z-80 flex justify-center items-start pt-[110px] px-5 gap-3">
+            <div className="w-full max-w-[980px] rounded-2xl border border-[#353b6c] bg-[#0c0b20] p-6 shadow-2xl">
+              <div className="mb-5">
+                <p className="font-bold text-[24px]">IP Geolocation Detail</p>
+                <p className="text-gray-500 text-sm mt-1">
+                  Informasi lokasi dan security dari IP yang dipilih.
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-[#353b6c] bg-[#08071a] p-4 mb-4">
+                <p className="text-gray-400 mb-3">Location Map</p>
+                <GeoMap
+                  lat={dataGeo?.latitude ?? 0}
+                  lon={dataGeo?.longitude ?? 0}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="rounded-xl border border-[#353b6c] bg-[#14122d] p-4">
+                  <p className="text-gray-400 mb-2">Location</p>
+                  <p>{dataGeo?.city_name}, {dataGeo?.region_name}</p>
+                  <p>{dataGeo?.country_name} ({dataGeo?.country_code})</p>
+                </div>
+
+                <div className="rounded-xl border border-[#353b6c] bg-[#14122d] p-4">
+                  <p className="text-gray-400 mb-2">Coordinates</p>
+                  <p>Lat: {dataGeo?.latitude}</p>
+                  <p>Lon: {dataGeo?.longitude}</p>
+                </div>
+
+                <div className="rounded-xl border border-[#353b6c] bg-[#14122d] p-4">
+                  <p className="text-gray-400 mb-2">Network</p>
+                  <p>ISP: {dataGeo?.isp}</p>
+                  <p>ASN: {dataGeo?.asn}</p>
+                </div>
+
+                <div className="rounded-xl border border-[#353b6c] bg-[#14122d] p-4">
+                  <p className="text-gray-400 mb-2">Security</p>
+                  <p>Fraud Score: {dataGeo?.fraud_score}</p>
+                  <p>
+                    Proxy:{' '}
+                    <span className={dataGeo?.is_proxy ? 'text-red-400' : 'text-green-400'}>
+                      {dataGeo?.is_proxy ? 'Yes' : 'No'}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setIsDetailIp(false)}
+              className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
+            >
+              <Image src="/close.png" alt="Close" width={14} height={14} />
             </button>
           </div>
         </>

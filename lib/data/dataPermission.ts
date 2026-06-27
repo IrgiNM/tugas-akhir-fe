@@ -1,5 +1,5 @@
 import { permissionType } from '@/type/permissionType'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getPermission } from '../function/api'
 
 const dataPermission = (id?: number) => {

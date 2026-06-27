@@ -30,12 +30,14 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+
 // AUTH
 export const login = (data: loginType) => api.post("api/login/", data);
 export const register = (data: registerType) => api.post("api/user/create/", data);
 export const getUser = () => api.get("api/user/get/");
 export const getMe = () => api.get("api/user/me/");
 export const deleteUser = (id: number) => api.delete(`api/user/delete/${id}/`);
+
 
 // PERMISSION
 export const createPermission = (data: permissionType) =>
@@ -46,6 +48,7 @@ export const getPermission = (id: number) =>
 
 export const deletePermissionUser = (id: number) =>
   api.delete(`api/permission/delete/${id}/`);
+
 
 // BACKUP
 export const getDatabaseInfo = () => api.get("api/database-info/");
@@ -58,6 +61,7 @@ export const backupDatabase = () =>
       responseType: "blob",
     }
   );
+
 
 // TOP REPORTS
 export const getDataTopReportsAll = () => api.get("detection/top-reports/");
@@ -74,6 +78,7 @@ export const getDataTopReportsYear = (date: string) =>
 export const getGeoIP = (data: string) =>
   api.get(`detection/geo/?ip=${data}`);
 
+
 // SYSLOG LOGS
 export const getSyslogLogs = (params?: SyslogLogFilterType) => {
   return api.get("detection/syslog-logs/", {
@@ -85,19 +90,10 @@ export const getSyslogLogDetail = (id: number) => {
   return api.get(`detection/syslog-logs/${id}/`);
 };
 
-export const fetchSyslogLogs = (date?: string) => {
-  return api.post(
-    "detection/syslog-logs/fetch/",
-    {},
-    {
-      params: date
-        ? {
-            date: date,
-          }
-        : {},
-    }
-  );
+export const fetchSyslogLogs = () => {
+  return api.post("detection/syslog-logs/fetch/", {});
 };
+
 
 // DATASET
 export const getSyslogDatasetList = () => {

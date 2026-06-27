@@ -1,15 +1,14 @@
 "use client"
 import dataGeoLocationIP from '@/lib/data/dataGeoLocationIP'
 import DataTopReportsFunction from '@/lib/data/dataTopReports'
-import { backupDatabase } from '@/lib/function/api'
 import { dataTopReportsType } from '@/type/dataTopReportsType'
 import { nameDataTopType } from '@/type/nameDataTopType'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-import TableTopReports from './tableTopReports'
 import GeoMap from '../sections/geoMapWrapper'
+import TableTopReports from './tableTopReports'
 
 
 const CardSummaryGetTopReports = () => {
@@ -21,13 +20,6 @@ const CardSummaryGetTopReports = () => {
     const [pickDateTop, setPickDateTop] = useState<string>('')
     const [pickMonthTop, setPickMonthTop] = useState<string>('')
     const [pickYearTop, setPickYearTop] = useState<string>('')
-    
-    const [pickBackupAwalYear, setPickBackupAwalYear] = useState<string>('0000')
-    const [pickBackupAwalMonth, setPickBackupAwalMonth] = useState<string>('00')
-    const [pickBackupAwalDate, setPickBackupAwalDate] = useState<string>('00')
-    const [pickBackupAkhirYear, setPickBackupAkhirYear] = useState<string>('0000')
-    const [pickBackupAkhirMonth, setPickBackupAkhirMonth] = useState<string>('00')
-    const [pickBackupAkhirDate, setPickBackupAkhirDate] = useState<string>('00')
 
     const {dataTopReports, dataJenisTop, dataSecurityJenisAndCountTop, dataExecutiveJenisAndCountTop, dataNameCountTop, dataDateAt,dataMonthAt,dataYearAt, dataStatistikPerMonth,namesByView} = DataTopReportsFunction( pickDateTop,pickMonthTop,pickYearTop)
     const {dataGeo} = dataGeoLocationIP(pickIP)
