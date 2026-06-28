@@ -24,7 +24,7 @@ const CardSummarySecurityEvents = () => {
     setIsFetchingSyslog(true)
   
     try {
-      const res = await fetchSyslogLogs(selectedFullDate)
+      const res = await fetchSyslogLogs()
   
       if (res.status === 200) {
         setRefreshSyslogKey((prev) => prev + 1)
