@@ -531,15 +531,17 @@ const DashboardClientMonitoring = ({
                         {selectedClient.ip}
                       </p>
                       {permissionsNow.includes("geolocation")&&(
-                        <button
-                          onClick={() => setIsDetailIp(true)}
-                          className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] hover:scale-[1.02] transition-all duration-200 shadow-lg shadow-blue-500/20 group"
-                        >
-                          <div className="text-left">
-                            <p className="text-[12px] text-blue-200 font-bold">GeoMap</p>
-                          </div>
-                          <Image src="/map.png" alt="Arrow" width={10} height={10} />
-                        </button>
+                        <>
+                          <button
+                            onClick={() => setIsDetailIp(true)}
+                            className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl border border-blue-500 bg-gradient-to-b from-[#2563eb] to-[#1e40af] hover:scale-[1.02] transition-all duration-200 shadow-lg shadow-blue-500/20 group"
+                          >
+                            <div className="text-left">
+                              <p className="text-[12px] text-blue-200 font-bold">GeoMap</p>
+                            </div>
+                            <Image src="/map.png" alt="Arrow" width={10} height={10} />
+                          </button>
+                        </>
                       )}
                     </div>
 
