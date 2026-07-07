@@ -11,7 +11,7 @@ export const BASEURL = `${"https://monitoringupatikpolindra.com".replace(/\/$/, 
 export const api = axios.create({
   baseURL: BASEURL,
   withCredentials: true,
-  timeout: 60000,
+  timeout: 0,
   headers: {
     Accept: "application/json",
   },
