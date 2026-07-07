@@ -6,7 +6,7 @@ import { permissionType } from "@/type/permissionType";
 import { SyslogLogFilterType } from "@/type/syslogLogType";
 
 
-export const BASEURL = `${"https://tugas-akhir-be-production.up.railway.app".replace(/\/$/, "")}/`;
+export const BASEURL = `${"https://monitoringupatikpolindra.com".replace(/\/$/, "")}/`;
 
 export const api = axios.create({
   baseURL: BASEURL,
