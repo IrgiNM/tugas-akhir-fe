@@ -35,6 +35,7 @@ const CardSummarySecurityEvents = () => {
       }
     } catch (error) {
       console.error("Error fetching syslog:", error)
+      alert(`Error fetching syslog: ${error}`)
       alert("Gagal fetch syslog")
     } finally {
       setIsFetchingSyslog(false)
