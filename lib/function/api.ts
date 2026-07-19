@@ -119,21 +119,15 @@ export const downloadSyslogDataset = (
     return false
   }
 
+  if (!fileUrl) {
+    return false
+  }
+
   try {
-    const link = document.createElement("a")
-
-    link.href = fileUrl
-    link.target = "_blank"
-    link.rel = "noopener noreferrer"
-    link.download = filename
-
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-
+    window.location.href = fileUrl
     return true
   } catch (error) {
-    console.error("Gagal menjalankan download:", error)
+    console.error("Gagal membuka file dataset:", error)
     return false
   }
 }

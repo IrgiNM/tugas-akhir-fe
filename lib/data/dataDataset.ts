@@ -115,13 +115,13 @@ export const useDataDataset = () => {
       )
   
       if (!berhasil) {
-        throw new Error("Download dataset gagal dijalankan.")
+        throw new Error("Gagal membuka file dataset.")
       }
   
-      const pesan = `Dataset mulai diunduh: ${item.file_name}`
+      const pesan = `Permintaan download dijalankan: ${item.file_name}`
   
       setMessage(pesan)
-      // alert(pesan)
+      alert(pesan)
     } catch (err: unknown) {
       console.error("Download dataset error:", err)
   
