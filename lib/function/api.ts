@@ -111,17 +111,31 @@ export const createSyslogDataset = (date?: string) => {
   );
 };
 
-export const downloadSyslogDataset = (fileUrl: string, filename: string) => {
-  if (typeof window === "undefined") return
+export const downloadSyslogDataset = async (
+  fileUrl: string,
+  filename: string
+) => {
+  const response = await fetch(fileUrl)
+
+  if (!response.ok) {
+    throw new Error(
+      `Gagal mengunduh dataset. Status: ${response.status}`
+    )
+  }
+
+  const blob = await response.blob()
+  const blobUrl = window.URL.createObjectURL(blob)
 
   const link = document.createElement("a")
 
-  link.href = fileUrl
-  link.setAttribute("download", filename)
-  link.setAttribute("target", "_blank")
-  link.setAttribute("rel", "noopener noreferrer")
+  link.href = blobUrl
+  link.download = filename
 
   document.body.appendChild(link)
   link.click()
   link.remove()
+
+  window.URL.revokeObjectURL(blobUrl)
+
+  return response
 }
