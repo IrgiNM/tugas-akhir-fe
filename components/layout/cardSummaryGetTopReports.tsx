@@ -124,7 +124,7 @@ const CardSummaryGetTopReports = () => {
         try {
           const res = await runAllTopReports()
       
-          if (res.status === 200) {
+          if (res.status === 202) {
             setRefreshTopReportsKey((prev) => prev + 1)
       
             alert(
@@ -136,6 +136,7 @@ const CardSummaryGetTopReports = () => {
           alert(`Error fetching TopReports: ${error}`)
           alert("Gagal fetch TopReports")
         } finally {
+          
           setIsFetchingTopReports(false)
         }
       }
