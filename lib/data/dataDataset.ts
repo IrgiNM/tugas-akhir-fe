@@ -99,19 +99,38 @@ export const useDataDataset = () => {
     }
   }
 
-  const handleDownloadDataset = (item: DatasetItem) => {
-    if (!item.file_path) {
-      alert("URL file dataset tidak ditemukan.")
-      return
+  const handleDownloadDataset = async (
+    item: DatasetItem
+  ) => {
+    setIsLoading(true)
+    setMessage("")
+    setError("")
+  
+    try {
+      if (!item.file_name) {
+        throw new Error("Nama file dataset tidak ditemukan.")
+      }
+  
+      await downloadSyslogDataset(item.file_name)
+  
+      const successMessage =
+        `Dataset berhasil diunduh: ${item.file_name}`
+  
+      setMessage(successMessage)
+      alert(successMessage)
+    } catch (err: unknown) {
+      console.error("Download dataset error:", err)
+  
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Gagal mengunduh dataset."
+  
+      setError(errorMessage)
+      alert(errorMessage)
+    } finally {
+      setIsLoading(false)
     }
-  
-    const link = document.createElement("a")
-    link.href = item.file_path
-    link.target = "_blank"
-  
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
   }
 
   const formatFileSize = (item: DatasetItem) => {

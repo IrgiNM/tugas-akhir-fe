@@ -111,18 +111,54 @@ export const createSyslogDataset = (date?: string) => {
   );
 };
 
-export const downloadSyslogDataset = (fileUrl: string) => {
-  if (typeof window === "undefined") {
-    throw new Error("Download hanya dapat dijalankan di browser.")
+export const downloadSyslogDataset = async (
+  filename: string
+) => {
+  const downloadUrl =
+    `/api/download-dataset?filename=${encodeURIComponent(filename)}`
+
+  const response = await fetch(downloadUrl, {
+    method: "GET",
+    cache: "no-store",
+  })
+
+  if (!response.ok) {
+    let errorMessage = "Gagal mengunduh dataset."
+
+    try {
+      const errorData = await response.json()
+
+      if (errorData?.message) {
+        errorMessage = errorData.message
+      }
+    } catch {
+      errorMessage =
+        `Gagal mengunduh dataset. Status: ${response.status}`
+    }
+
+    throw new Error(errorMessage)
   }
+
+  const blob = await response.blob()
+
+  if (blob.size === 0) {
+    throw new Error("File dataset kosong.")
+  }
+
+  const blobUrl = window.URL.createObjectURL(blob)
 
   const link = document.createElement("a")
 
-  link.href = fileUrl
-  link.target = "_blank"
-  link.rel = "noopener noreferrer"
+  link.href = blobUrl
+  link.download = filename
 
   document.body.appendChild(link)
   link.click()
-  document.body.removeChild(link)
+  link.remove()
+
+  setTimeout(() => {
+    window.URL.revokeObjectURL(blobUrl)
+  }, 1000)
+
+  return true
 }

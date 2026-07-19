@@ -232,19 +232,19 @@ const DatasetPage = ({ click1 }: ClickType) => {
 
                       <td className="px-6 py-4">
                         <div className="flex justify-center">
-                          {/* <button
+                          <button
                             onClick={() => handleDownloadDataset(item)}
                             disabled={isLoading}
                             className="rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-xs font-bold text-white transition hover:bg-white hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            Download
-                          </button> */}
-                          <a
+                            {isLoading ? "Downloading..." : "Download"}
+                          </button>
+                          {/* <a
                             href={item.file_path || '#'}
                             className="rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-xs font-bold text-white transition hover:bg-white hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             Download
-                          </a>
+                          </a> */}
                         </div>
                       </td>
                     </tr>
