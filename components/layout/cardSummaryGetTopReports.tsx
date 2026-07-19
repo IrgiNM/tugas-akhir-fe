@@ -9,6 +9,7 @@ import { Bar, BarChart, CartesianGrid, Cell, LabelList, Legend, Line, LineChart,
 
 import GeoMap from '../sections/geoMapWrapper'
 import TableTopReports from './tableTopReports'
+import { runAllTopReports } from '@/lib/function/api'
 
 
 const CardSummaryGetTopReports = () => {
@@ -31,6 +32,9 @@ const CardSummaryGetTopReports = () => {
 
     const [activeCategory, setActiveCategory] = useState<'executive' | 'security' | null>('executive')
     const [isDetailIp, setIsDetailIp] = useState<boolean>(false)
+
+    const [isFetchingTopReports, setIsFetchingTopReports] = useState<boolean>(false)
+    const [refreshTopReportsKey, setRefreshTopReportsKey] = useState<number>(0)
     
     const COLORS = [
         "#ef4444", // red
@@ -114,6 +118,28 @@ const CardSummaryGetTopReports = () => {
         .replace(/\b\w/g, c => c.toUpperCase())
     }
 
+    const handleFetchTopReports = async () => {
+        setIsFetchingTopReports(true)
+      
+        try {
+          const res = await runAllTopReports()
+      
+          if (res.status === 200) {
+            setRefreshTopReportsKey((prev) => prev + 1)
+      
+            alert(
+              `Fetch top reports selesai.`
+            )
+          }
+        } catch (error) {
+          console.error("Error fetching TopReports:", error)
+          alert(`Error fetching TopReports: ${error}`)
+          alert("Gagal fetch TopReports")
+        } finally {
+          setIsFetchingTopReports(false)
+        }
+      }
+
     return (
         <div className="w-full mt-[135px] rounded-2xl border border-[#353b6c] bg-[#070616] p-6 md:p-8 text-white shadow-2xl shadow-black/30">
       
@@ -135,6 +161,19 @@ const CardSummaryGetTopReports = () => {
               </div>
       
               <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                  onClick={handleFetchTopReports}
+                  disabled={isFetchingTopReports}
+                  className={`
+                    flex items-center justify-center gap-3 px-4 py-3 rounded-xl 
+                    border border-blue-500/30 bg-blue-500/10 
+                    text-blue-300 font-bold 
+                    hover:bg-blue-500/20 transition-all duration-200
+                    ${isFetchingTopReports ? "opacity-60 cursor-not-allowed" : ""}
+                  `}
+                >
+                  {isFetchingTopReports ? "Fetching..." : "Fetch Manual"}
+                </button>
                 <button
                   onClick={() => setSelectedDate(true)}
                   className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 hover:bg-[#353b6c] transition-all duration-200 group"

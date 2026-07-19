@@ -76,6 +76,8 @@ export const getDataTopReportsMonth = (date: string) =>
 export const getDataTopReportsYear = (date: string) =>
   api.get(`detection/top-reports/?year=${date}`);
 
+export const runAllTopReports = () => api.get(`detection/top-reports/run/`);
+
 export const getGeoIP = (data: string) =>
   api.get(`detection/geo/?ip=${data}`);
 
