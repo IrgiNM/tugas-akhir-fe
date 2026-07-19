@@ -6,8 +6,8 @@ import { permissionType } from "@/type/permissionType";
 import { SyslogLogFilterType } from "@/type/syslogLogType";
 
 
-export const BASEURL = `${"https://monitoringupatikpolindra.com".replace(/\/$/, "")}/`;
-// export const BASEURL = `${"http://127.0.0.1:8000".replace(/\/$/, "")}/`;
+// export const BASEURL = `${"https://monitoringupatikpolindra.com".replace(/\/$/, "")}/`;
+export const BASEURL = `${"http://127.0.0.1:8000".replace(/\/$/, "")}/`;
 
 export const api = axios.create({
   baseURL: BASEURL,
