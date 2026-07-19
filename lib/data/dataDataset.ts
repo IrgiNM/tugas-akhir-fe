@@ -100,34 +100,18 @@ export const useDataDataset = () => {
   }
 
   const handleDownloadDataset = (item: DatasetItem) => {
-    setMessage("")
-    setError("")
-  
-    try {
-      if (!item.file_path) {
-        throw new Error("URL file dataset tidak ditemukan.")
-      }
-  
-      console.log("URL download:", item.file_path)
-  
-      downloadSyslogDataset(item.file_path)
-  
-      setMessage(`Download dataset dibuka: ${item.file_name}`)
-  
-      setTimeout(() => {
-        alert(`Download dataset dibuka: ${item.file_name}`)
-      }, 500)
-    } catch (err: unknown) {
-      console.error("Download dataset error:", err)
-  
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Gagal membuka file dataset."
-  
-      setError(errorMessage)
-      alert(errorMessage)
+    if (!item.file_path) {
+      alert("URL file dataset tidak ditemukan.")
+      return
     }
+  
+    const link = document.createElement("a")
+    link.href = item.file_path
+    link.target = "_blank"
+  
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
   }
 
   const formatFileSize = (item: DatasetItem) => {
