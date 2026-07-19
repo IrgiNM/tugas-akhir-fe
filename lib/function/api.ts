@@ -111,23 +111,18 @@ export const createSyslogDataset = (date?: string) => {
   );
 };
 
-export const downloadSyslogDataset = (
-  fileUrl: string,
-  filename: string
-): boolean => {
+export const downloadSyslogDataset = (fileUrl: string) => {
   if (typeof window === "undefined") {
-    return false
+    throw new Error("Download hanya dapat dijalankan di browser.")
   }
 
-  if (!fileUrl) {
-    return false
-  }
+  const link = document.createElement("a")
 
-  try {
-    window.location.href = fileUrl
-    return true
-  } catch (error) {
-    console.error("Gagal membuka file dataset:", error)
-    return false
-  }
+  link.href = fileUrl
+  link.target = "_blank"
+  link.rel = "noopener noreferrer"
+
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
