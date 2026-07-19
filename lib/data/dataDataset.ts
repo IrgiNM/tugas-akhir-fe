@@ -121,7 +121,7 @@ export const useDataDataset = () => {
       const pesan = `Dataset mulai diunduh: ${item.file_name}`
   
       setMessage(pesan)
-      alert(pesan)
+      // alert(pesan)
     } catch (err: unknown) {
       console.error("Download dataset error:", err)
   
