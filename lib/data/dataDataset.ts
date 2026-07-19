@@ -99,7 +99,7 @@ export const useDataDataset = () => {
     }
   }
 
-  const handleDownloadDataset = async (item: DatasetItem) => {
+  const handleDownloadDataset = (item: DatasetItem) => {
     setIsLoading(true)
     setMessage("")
     setError("")
@@ -109,27 +109,29 @@ export const useDataDataset = () => {
         throw new Error("URL file dataset tidak ditemukan.")
       }
   
-      const response = await downloadSyslogDataset(
+      const berhasil = downloadSyslogDataset(
         item.file_path,
         item.file_name
       )
   
-      if (response.ok) {
-        const successMessage = `Dataset berhasil diunduh: ${item.file_name}`
-  
-        setMessage(successMessage)
-        alert(successMessage)
+      if (!berhasil) {
+        throw new Error("Download dataset gagal dijalankan.")
       }
+  
+      const pesan = `Dataset mulai diunduh: ${item.file_name}`
+  
+      setMessage(pesan)
+      alert(pesan)
     } catch (err: unknown) {
       console.error("Download dataset error:", err)
   
-      const errorMessage =
+      const pesanError =
         err instanceof Error
           ? err.message
           : "Gagal mengunduh dataset."
   
-      setError(errorMessage)
-      alert(errorMessage)
+      setError(pesanError)
+      alert(pesanError)
     } finally {
       setIsLoading(false)
     }

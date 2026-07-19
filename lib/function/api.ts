@@ -111,31 +111,29 @@ export const createSyslogDataset = (date?: string) => {
   );
 };
 
-export const downloadSyslogDataset = async (
+export const downloadSyslogDataset = (
   fileUrl: string,
   filename: string
-) => {
-  const response = await fetch(fileUrl)
-
-  if (!response.ok) {
-    throw new Error(
-      `Gagal mengunduh dataset. Status: ${response.status}`
-    )
+): boolean => {
+  if (typeof window === "undefined") {
+    return false
   }
 
-  const blob = await response.blob()
-  const blobUrl = window.URL.createObjectURL(blob)
+  try {
+    const link = document.createElement("a")
 
-  const link = document.createElement("a")
+    link.href = fileUrl
+    link.target = "_blank"
+    link.rel = "noopener noreferrer"
+    link.download = filename
 
-  link.href = blobUrl
-  link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
 
-  document.body.appendChild(link)
-  link.click()
-  link.remove()
-
-  window.URL.revokeObjectURL(blobUrl)
-
-  return response
+    return true
+  } catch (error) {
+    console.error("Gagal menjalankan download:", error)
+    return false
+  }
 }
