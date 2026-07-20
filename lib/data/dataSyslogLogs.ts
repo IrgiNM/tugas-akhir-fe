@@ -23,7 +23,7 @@ const useSyslogLogs = (
         const res = await getSyslogLogs(filter)
   
         if (res.status === 200) {
-          alert("Berhasil mengambil data syslog logs")
+          // alert("Berhasil mengambil data syslog logs")
           setSyslogLogs(res.data.data || [])
           setTotalData(res.data.count || 0)
         }
