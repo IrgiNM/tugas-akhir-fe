@@ -125,37 +125,80 @@ const useSyslogLogs = (
       ? Number(filter.month)
       : now.getMonth() + 1
   
-    const totalDays = new Date(selectedYear, selectedMonth, 0).getDate()
+    const totalDays = new Date(
+      selectedYear,
+      selectedMonth,
+      0
+    ).getDate()
   
-    const days = Array.from({ length: totalDays }, (_, index) => {
-      const day = String(index + 1).padStart(2, "0")
-  
-      return {
-        date: day,
-        allow: 0,
-        deny: 0,
-      }
-    })
+    const days = Array.from({ length: totalDays }, (_, index) => ({
+      date: String(index + 1).padStart(2, "0"),
+      allow: 0,
+      deny: 0,
+    }))
   
     syslogLogs.forEach((item) => {
       if (!item.timestamp) return
   
-      const logDate = new Date(item.timestamp)
-      const dayIndex = logDate.getDate() - 1
+      /*
+        Ambil tanggal langsung dari string timestamp.
+        Contoh format yang didukung:
+  
+        2026-07-20T10:30:00+07:00
+        2026-07-20T03:30:00Z
+        2026-07-20 10:30:00
+      */
+      const datePart = String(item.timestamp)
+        .trim()
+        .split("T")[0]
+        .split(" ")[0]
+  
+      const [logYear, logMonth, logDay] = datePart
+        .split("-")
+        .map(Number)
+  
+      // Timestamp tidak valid
+      if (
+        !logYear ||
+        !logMonth ||
+        !logDay
+      ) {
+        console.warn("Timestamp tidak valid:", item.timestamp)
+        return
+      }
+  
+      // Hanya masukkan data sesuai bulan dan tahun yang dipilih
+      if (
+        logYear !== selectedYear ||
+        logMonth !== selectedMonth
+      ) {
+        return
+      }
+  
+      const dayIndex = logDay - 1
   
       if (!days[dayIndex]) return
   
-      if (item.action === "Allow") {
+      // Normalisasi action agar tidak sensitif kapital dan spasi
+      const action = String(item.action ?? "")
+        .trim()
+        .toLowerCase()
+  
+      if (action === "allow") {
         days[dayIndex].allow += 1
       }
   
-      if (item.action === "Deny") {
+      if (action === "deny") {
         days[dayIndex].deny += 1
       }
     })
   
     return days
-  }, [syslogLogs, filter?.month, filter?.year])
+  }, [
+    syslogLogs,
+    filter?.month,
+    filter?.year,
+  ])
 
   const latestLogs = useMemo(() => {
     return syslogLogs.slice(0, 100).map((item) => {
