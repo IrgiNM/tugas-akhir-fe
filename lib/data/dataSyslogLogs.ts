@@ -158,7 +158,7 @@ const useSyslogLogs = (
   }, [syslogLogs, filter?.month, filter?.year])
 
   const latestLogs = useMemo(() => {
-    return syslogLogs.slice(0, 10000).map((item) => {
+    return syslogLogs.slice(0, 100).map((item) => {
       const time = item.timestamp
         ? new Date(item.timestamp).toLocaleTimeString("id-ID", {
             hour: "2-digit",
