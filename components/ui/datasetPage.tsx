@@ -120,7 +120,7 @@ const DatasetPage = ({ click1 }: ClickType) => {
                     </p>
                 </div>
 
-                <Image src="/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                <Image src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
             </button>
 
               <button
@@ -377,7 +377,7 @@ const DatasetPage = ({ click1 }: ClickType) => {
                 onClick={() => setSelectedDateModal(false)}
                 className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
             >
-                <Image src="/close.png" alt="Close" width={12} height={12} />
+                <Image src="/irgi/close.png" alt="Close" width={12} height={12} />
             </button>
             </div>
         </>

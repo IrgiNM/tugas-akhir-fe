@@ -107,7 +107,7 @@ const BackupPage = () => {
               <p className="font-bold">
                 {isLoading ? 'Backing Up...' : 'Backup Now'}
               </p>
-              <Image src="/download.png" alt="Download" width={18} height={18} />
+              <Image src="/irgi/download.png" alt="Download" width={18} height={18} />
             </button>
           </div>
         </div>
