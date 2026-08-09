@@ -20,7 +20,7 @@ const useSyslogLogs = (
       setErrorSyslog("")
   
       try {
-        const res = await getSyslogLogs()
+        const res = await getSyslogLogs(filter)
   
         if (res.status === 200) {
           // alert("Berhasil mengambil data syslog logs")
