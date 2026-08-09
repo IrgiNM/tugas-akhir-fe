@@ -133,7 +133,7 @@ const CardSummarySecurityEvents = () => {
                 </p>
               </div>
 
-              <Image src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
+              <Img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
             </button>
 
             <div className="flex items-center gap-4 px-4 py-3 rounded-xl border border-[#353b6c] bg-[#0c0b20]/80">
@@ -317,7 +317,7 @@ const CardSummarySecurityEvents = () => {
               onClick={() => setSelectedDate(false)}
               className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
             >
-              <Image src="/irgi/close.png" alt="Close" width={12} height={12} />
+              <Img src="/irgi/close.png" alt="Close" width={12} height={12} />
             </button>
           </div>
         </>

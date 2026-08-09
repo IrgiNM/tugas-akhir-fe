@@ -120,7 +120,7 @@ const DatasetPage = ({ click1 }: ClickType) => {
                     </p>
                 </div>
 
-                <Image src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                <Img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
             </button>
 
               <button
@@ -262,7 +262,7 @@ const DatasetPage = ({ click1 }: ClickType) => {
 
             <div className="fixed left-0 top-0 z-[100] flex h-screen w-screen items-center justify-center">
               <div className="flex min-h-[180px] w-[360px] flex-col items-center justify-center gap-4 rounded-2xl border border-[#26345f] bg-[#0b1430] shadow-2xl">
-                <Image
+                <Img
                   src="/Loading.png"
                   alt="Loading"
                   width={42}
@@ -377,7 +377,7 @@ const DatasetPage = ({ click1 }: ClickType) => {
                 onClick={() => setSelectedDateModal(false)}
                 className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
             >
-                <Image src="/irgi/close.png" alt="Close" width={12} height={12} />
+                <Img src="/irgi/close.png" alt="Close" width={12} height={12} />
             </button>
             </div>
         </>
