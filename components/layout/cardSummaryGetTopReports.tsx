@@ -185,7 +185,7 @@ const CardSummaryGetTopReports = () => {
                       {pickYearTop}-{pickMonthTop}-{pickDateTop}
                     </p>
                   </div>
-                  <Img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                  <img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
                 </button>
       
                 <button
@@ -198,7 +198,7 @@ const CardSummaryGetTopReports = () => {
                       {pickJenisTop}
                     </p>
                   </div>
-                  <Img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                  <img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
                 </button>
               </div>
             </div>
@@ -334,7 +334,7 @@ const CardSummaryGetTopReports = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-5">
                   <div className="w-[52px] h-[52px] rounded-full bg-[#3a2604] border-2 border-[#fdff71] flex items-center justify-center mb-4">
-                    <Img src="/irgi/status.png" alt="Status" width={22} height={22} />
+                    <img src="/irgi/status.png" alt="Status" width={22} height={22} />
                   </div>
                   <p className="text-gray-400 text-sm">Total Reports</p>
                   <p className="text-[28px] font-bold mt-1">{totalReports}</p>
@@ -342,7 +342,7 @@ const CardSummaryGetTopReports = () => {
       
                 <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-5">
                   <div className="w-[52px] h-[52px] rounded-full bg-[#071049] border-2 border-blue-500 flex items-center justify-center mb-4">
-                    <Img src="/irgi/http.png" alt="HTTP" width={18} height={18} />
+                    <img src="/irgi/http.png" alt="HTTP" width={18} height={18} />
                   </div>
                   <p className="text-gray-400 text-sm">Total Connections</p>
                   <p className="text-[28px] font-bold mt-1">{totalConnections}</p>
@@ -350,7 +350,7 @@ const CardSummaryGetTopReports = () => {
       
                 <div className="rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 p-5 sm:col-span-2">
                   <div className="w-[52px] h-[52px] rounded-full bg-[#071049] border-2 border-blue-500 flex items-center justify-center mb-4">
-                    <Img src="/irgi/wifi.png" alt="Wifi" width={22} height={22} />
+                    <img src="/irgi/wifi.png" alt="Wifi" width={22} height={22} />
                   </div>
                   <p className="text-gray-400 text-sm">Total Traffic Bytes</p>
                   <p className="text-[28px] font-bold mt-1">
@@ -412,7 +412,7 @@ const CardSummaryGetTopReports = () => {
                       {pickYearTop}-{pickMonthTop}
                     </p>
                   </div>
-                  <Img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                  <img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
                 </button>
       
                 <button
@@ -425,7 +425,7 @@ const CardSummaryGetTopReports = () => {
                       {pickJenisTop}
                     </p>
                   </div>
-                  <Img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
+                  <img src="/irgi/arrow-icon.png" alt="Arrow" width={8} height={8} />
                 </button>
               </div>
             </div>
@@ -589,7 +589,7 @@ const CardSummaryGetTopReports = () => {
                     onClick={() => setSelectedView(false)}
                     className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
                 >
-                    <Img src="/irgi/close.png" alt="Close" width={12} height={12} />
+                    <img src="/irgi/close.png" alt="Close" width={12} height={12} />
                 </button>
                 </div>
             </>
@@ -653,7 +653,7 @@ const CardSummaryGetTopReports = () => {
                   onClick={() => setIsDetailIp(false)}
                   className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
                 >
-                  <Img src="/irgi/close.png" alt="Close" width={14} height={14} />
+                  <img src="/irgi/close.png" alt="Close" width={14} height={14} />
                 </button>
               </div>
             </>
@@ -741,7 +741,7 @@ const CardSummaryGetTopReports = () => {
                   onClick={() => setSelectedDate(false)}
                   className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
                 >
-                  <Img src="/irgi/close.png" alt="Close" width={12} height={12} />
+                  <img src="/irgi/close.png" alt="Close" width={12} height={12} />
                 </button>
               </div>
             </>
@@ -808,7 +808,7 @@ const CardSummaryGetTopReports = () => {
                   onClick={() => setSelectedMonth(false)}
                   className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
                 >
-                  <Img src="/irgi/close.png" alt="Close" width={12} height={12} />
+                  <img src="/irgi/close.png" alt="Close" width={12} height={12} />
                 </button>
               </div>
             </>

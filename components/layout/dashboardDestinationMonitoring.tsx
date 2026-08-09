@@ -357,7 +357,7 @@ const DashboardDestinationMonitoring = ({
               onClick={() => setSelectedInfo(true)}
               className="flex items-center justify-center gap-3 px-5 py-3 rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 hover:bg-[#353b6c] transition-all duration-200"
             >
-              <Img src="/irgi/info.png" alt="Info" width={15} height={15} />
+              <img src="/irgi/info.png" alt="Info" width={15} height={15} />
               <p className="font-bold">Info Destination</p>
             </button>
           </div>
@@ -528,7 +528,7 @@ const DashboardDestinationMonitoring = ({
                           <div className="text-left">
                             <p className="text-[12px] text-blue-200 font-bold">GeoMap</p>
                           </div>
-                          <Img src="/irgi/map.png" alt="Arrow" width={10} height={10} />
+                          <img src="/irgi/map.png" alt="Arrow" width={10} height={10} />
                         </button>
                       )}
                     </div>
@@ -702,7 +702,7 @@ const DashboardDestinationMonitoring = ({
               onClick={() => setSelectedInfo(false)}
               className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
             >
-              <Img src="/irgi/close.png" alt="Close" width={12} height={12} />
+              <img src="/irgi/close.png" alt="Close" width={12} height={12} />
             </button>
           </div>
         </>
@@ -767,7 +767,7 @@ const DashboardDestinationMonitoring = ({
               onClick={() => setIsDetailIp(false)}
               className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
             >
-              <Img src="/irgi/close.png" alt="Close" width={14} height={14} />
+              <img src="/irgi/close.png" alt="Close" width={14} height={14} />
             </button>
           </div>
         </>

@@ -27,7 +27,7 @@ const Header = () => {
 
             <div className="relative flex justify-center items-center w-[70px] h-[70px] rounded-2xl border border-[#353b6c] bg-gradient-to-br from-[#111c45] to-[#120b2f] shadow-lg shadow-blue-500/10">
               <div className="flex justify-center items-center w-[54px] h-[54px] rounded-full bg-white">
-                <Img
+                <img
                   src="/polindra-logo.png"
                   alt="Polindra Logo"
                   width={42}
