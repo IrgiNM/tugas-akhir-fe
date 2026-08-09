@@ -10,10 +10,35 @@ const useSyslogLogs = (
     refreshKey?: number
   ) => {
   const [syslogLogs, setSyslogLogs] = useState<SyslogLogType[]>([]);
+  const [syslogLogsFull, setSyslogLogsFull] = useState<SyslogLogType[]>([]);
   const [totalData, setTotalData] = useState<number>(0);
   const [isLoadingSyslog, setIsLoadingSyslog] = useState<boolean>(false);
   const [errorSyslog, setErrorSyslog] = useState<string>("");
 
+  useEffect(() => {
+    const fetchDataSyslogLogs = async () => {
+      setIsLoadingSyslog(true)
+      setErrorSyslog("")
+  
+      try {
+        const res = await getSyslogLogs()
+  
+        if (res.status === 200) {
+          // alert("Berhasil mengambil data syslog logs")
+          setSyslogLogsFull(res.data.data || [])
+        }
+      } catch (error) {
+        console.error("Error fetching syslog logs:", error)
+        setErrorSyslog("Gagal mengambil data syslog logs")
+      } finally {
+        setIsLoadingSyslog(false)
+      }
+    }
+  
+    fetchDataSyslogLogs()
+  }, [])
+  
+  
   useEffect(() => {
     const fetchDataSyslogLogs = async () => {
       setIsLoadingSyslog(true)
@@ -269,7 +294,7 @@ const useSyslogLogs = (
 
 
   const dataYearAt = useMemo(() => {
-    const years = syslogLogs
+    const years = syslogLogsFull
       .filter((item) => item.timestamp)
       .map((item) => {
         const date = new Date(item.timestamp as string)
@@ -277,10 +302,10 @@ const useSyslogLogs = (
       })
   
     return Array.from(new Set(years)).sort((a, b) => Number(b) - Number(a))
-  }, [syslogLogs])
+  }, [syslogLogsFull])
   
   const dataMonthAt = useMemo(() => {
-    const months = syslogLogs
+    const months = syslogLogsFull
       .filter((item) => item.timestamp)
       .filter((item) => {
         if (!filter?.year) return true
@@ -294,10 +319,10 @@ const useSyslogLogs = (
       })
   
     return Array.from(new Set(months)).sort((a, b) => Number(a) - Number(b))
-  }, [syslogLogs, filter?.year])
+  }, [syslogLogsFull, filter?.year])
   
   const dataDateAt = useMemo(() => {
-    const dates = syslogLogs
+    const dates = syslogLogsFull
       .filter((item) => item.timestamp)
       .filter((item) => {
         const date = new Date(item.timestamp as string)
@@ -316,7 +341,7 @@ const useSyslogLogs = (
       })
   
     return Array.from(new Set(dates)).sort((a, b) => Number(a) - Number(b))
-  }, [syslogLogs, filter?.year, filter?.month])
+  }, [syslogLogsFull, filter?.year, filter?.month])
 
   return {
     syslogLogs,
