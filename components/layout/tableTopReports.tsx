@@ -43,7 +43,7 @@ const TableTopReports = ({click1, data, pick}: { click1: (name: string) => void,
                                         {item.name}
                                     </p>
                                     <div className='flex items-center justify-center'>
-                                        <img src="/irgi/arrow-right.png" alt="Logo" width={18} height={18} />
+                                        <Image src="/irgi/arrow-right.png" alt="Logo" width={18} height={18} />
                                     </div>
                                 </button>
                             ):(

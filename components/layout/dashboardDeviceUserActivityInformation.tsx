@@ -407,7 +407,7 @@ const DashboardDeviceUserActivityInformation = () => {
                   onClick={() => setSelectedDevice(null)}
                   className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
                 >
-                  <img src="/irgi/close.png" alt="Close" width={12} height={12} />
+                  <Image src="/irgi/close.png" alt="Close" width={12} height={12} />
                 </button>
               </div>
 

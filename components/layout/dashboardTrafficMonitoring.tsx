@@ -405,7 +405,7 @@ const DashboardTrafficMonitoring = ({
               onClick={() => setSelectedInfo(true)}
               className="flex items-center justify-center gap-3 px-5 py-3 rounded-xl border border-[#353b6c] bg-[#0c0b20]/70 hover:bg-[#353b6c] transition-all duration-200"
             >
-              <img src="/irgi/info.png" alt="Info" width={15} height={15} />
+              <Image src="/irgi/info.png" alt="Info" width={15} height={15} />
               <p className="font-bold">Info Traffic</p>
             </button>
           </div>
@@ -728,7 +728,7 @@ const DashboardTrafficMonitoring = ({
               onClick={() => setSelectedInfo(false)}
               className="rounded-xl p-4 border border-[#353b6c] bg-[#0c0b20] hover:bg-[#353b6c] transition-all duration-200"
             >
-              <img src="/irgi/close.png" alt="Close" width={12} height={12} />
+              <Image src="/irgi/close.png" alt="Close" width={12} height={12} />
             </button>
           </div>
         </>

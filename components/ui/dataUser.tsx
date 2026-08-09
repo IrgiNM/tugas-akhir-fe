@@ -222,7 +222,7 @@ const DataUser = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="flex flex-row items-center gap-4 rounded-xl border-[.5px] border-[#353b6c] bg-gradient-to-t from-[#111c45] to-[#120b2f] p-5">
             <div className="w-[50px] h-[50px] rounded-full bg-[#071049] border-2 border-blue-500 flex items-center justify-center">
-              <img src="/irgi/admin.png" alt="Admin" width={22} height={22} />
+              <Image src="/irgi/admin.png" alt="Admin" width={22} height={22} />
             </div>
 
             <div>
@@ -290,7 +290,7 @@ const DataUser = () => {
           {dataUser.length === 0 ? (
             <div className="w-full min-h-[330px] flex flex-col items-center justify-center rounded-lg border border-dashed border-[#353b6c] bg-[#0c0b20]">
               <div className="w-[80px] h-[80px] rounded-full bg-[#14122d] border border-[#353b6c] flex items-center justify-center mb-5">
-                <img src="/irgi/admin.png" alt="Admin" width={32} height={32} />
+                <Image src="/irgi/admin.png" alt="Admin" width={32} height={32} />
               </div>
 
               <p className="font-bold text-[20px] mb-2">Belum Ada User</p>
@@ -343,7 +343,7 @@ const DataUser = () => {
 
                   <div className="relative flex items-center gap-4 min-w-0">
                     <div className="w-[55px] h-[55px] rounded-full bg-[#071049] border-2 border-blue-500 flex items-center justify-center shrink-0">
-                      <img
+                      <Image
                         src="/admin.png"
                         alt="Admin"
                         width={24}
@@ -400,7 +400,7 @@ const DataUser = () => {
                         "
                         title="Delete"
                     >
-                        <img
+                        <Image
                         src="/delete.png"
                         alt="Delete"
                         width={16}
@@ -454,7 +454,7 @@ const DataUser = () => {
             </button>
 
             <div className="w-[65px] h-[65px] rounded-full bg-[#3a020f] border-2 border-red-500 flex items-center justify-center mb-5">
-              <img src="/irgi/delete.png" alt="Delete" width={24} height={24} />
+              <Image src="/irgi/delete.png" alt="Delete" width={24} height={24} />
             </div>
 
             <p className="font-bold text-[24px] mb-2">Hapus User?</p>
@@ -493,7 +493,7 @@ const DataUser = () => {
             </button>
 
             <div className="w-[65px] h-[65px] rounded-full bg-[#3a020f] border-2 border-red-500 flex items-center justify-center mb-5">
-              <img src="/irgi/delete.png" alt="Delete" width={24} height={24} />
+              <Image src="/irgi/delete.png" alt="Delete" width={24} height={24} />
             </div>
 
             <p className="font-bold text-[24px] mb-2">Hapus Permission?</p>
@@ -539,7 +539,7 @@ const DataUser = () => {
 
             <div className="mb-6">
               <div className="w-[65px] h-[65px] rounded-full bg-[#071049] border-2 border-blue-500 flex items-center justify-center mb-5">
-                <img src="/irgi/admin.png" alt="Admin" width={30} height={30} />
+                <Image src="/irgi/admin.png" alt="Admin" width={30} height={30} />
               </div>
 
               <p className="font-bold text-[26px]">Add User</p>
